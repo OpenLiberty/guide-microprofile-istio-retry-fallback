@@ -1,0 +1,51 @@
+// INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
+// INSTRUCTION: The copyright statement must appear at the top of the file
+//
+// Copyright (c) 2018, 2019 IBM Corporation and others.
+// Licensed under Creative Commons Attribution-NoDerivatives
+// 4.0 International (CC BY-ND 4.0)
+//   https://creativecommons.org/licenses/by-nd/4.0/
+//
+// Contributors:
+//     IBM Corporation
+//
+:projectid: kubernetes-intro
+:page-layout: guide-multipane
+:page-duration: 25 minutes
+:page-releasedate: 2019-08-01
+:page-description: Explore how to use MicroProfile Fault Tolerance with Istio
+:page-tags: ['Kubernetes']
+:page-permalink: /guides/{projectid}
+:page-related-guides: ['istio']
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+:source-highlighter: prettify
+:page-seo-title: Fault Tolerance Retry with MicroProfile and Istio
+:page-seo-description: How to retry services with MicroProfile and Istio Fault Tolerance
+:guide-author: Open Liberty
+= Building fault-tolerant microservices using MicroProfile and Istio Retry
+
+[.hidden]
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+
+Deploy.
+
+:minikube-ip: 192.168.99.100
+:kube: Kubernetes
+:hashtag: #
+:win: WINDOWS
+:mac: MAC
+:linux: LINUX
+:system-api: http://[hostname]:31000/system/properties
+:inventory-api: http://[hostname]:32000/inventory/systems
+
+
+
+// =================================================================================================
+// finish
+// =================================================================================================
+
+== Great work! You're done!
+
+// Include the below from the guides-common repo to tell users how they can contribute to the guide
+
+include::{common-includes}/attribution.adoc[subs="attributes"]
