@@ -57,6 +57,12 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
         </dependency>
+        <dependency>
+           <groupId>io.openliberty.features</groupId>
+           <artifactId>mpFaultTolerance-2.0</artifactId>
+           <type>esa</type>
+           <scope>provided</scope>
+        </dependency>  
         <!-- Support for JDK 9 and above -->
         <dependency>
             <groupId>javax.xml.bind</groupId>

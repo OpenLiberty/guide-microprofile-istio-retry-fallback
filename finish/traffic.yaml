@@ -13,9 +13,6 @@ spec:
         port:
           number: 9080
         host: system-service
-    retries:
-      attempts: 3
-      retryOn: 5xx
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -32,10 +29,6 @@ spec:
         port:
           number: 9080
         host: inventory-service
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: service-config
-data:
-    MP_Fault_Tolerance_NonFallback_Enabled: "false"
+    retries:
+      attempts: 4
+      retryOn: 5xx
