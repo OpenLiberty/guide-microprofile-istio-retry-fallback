@@ -9,36 +9,47 @@
 // Contributors:
 //     IBM Corporation
 //
-:projectid: kubernetes-intro
+:projectid: microprofile-istio-retry
 :page-layout: guide-multipane
-:page-duration: 25 minutes
+:page-duration: 30 minutes
 :page-releasedate: 2019-08-01
-:page-description: Explore how to use MicroProfile Fault Tolerance with Istio
+:page-description: Explore how to use Fault Tolerance with MicroProfile and Istio
 :page-tags: ['Kubernetes']
 :page-permalink: /guides/{projectid}
-:page-related-guides: ['istio']
+:page-related-guides: ['istio-intro', 'microprofile-fallback']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
-:page-seo-title: Fault Tolerance Retry with MicroProfile and Istio
-:page-seo-description: How to retry services with MicroProfile and Istio Fault Tolerance
+:page-seo-title: Retry and Fallback with MicroProfile and Istio Fault Tolerance
+:page-seo-description: How to retry services and add fallback behaviour with MicroProfile and Istio Fault Tolerance
 :guide-author: Open Liberty
-= Building fault-tolerant microservices using MicroProfile and Istio Retry
+= Building fault-tolerant microservices using Istio Retry with Microprofile Fallback
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
 
-Deploy.
 
-:minikube-ip: 192.168.99.100
+You’ll explore how to manage the impact of failures using MicroProfile and Istio Fault Tolerance by adding retry and fallback behavior to microservice dependencies.
+
 :kube: Kubernetes
 :hashtag: #
-:win: WINDOWS
-:mac: MAC
-:linux: LINUX
-:system-api: http://[hostname]:31000/system/properties
-:inventory-api: http://[hostname]:32000/inventory/systems
+
+// =================================================================================================
+// Introduction
+// =================================================================================================
+
+== What you'll learn
 
 
+Explore how to use https://microprofile.io/[MicroProfile^] Retry and Fallback policies with https://istio.io/[Istio^] Retry 
+to make your microservices more resilient to common failures like network problems or an `IOException`.
+
+
+// =================================================================================================
+// Getting Started
+// =================================================================================================
+
+[role='command']
+include::{common-includes}/gitclone.adoc[]
 
 // =================================================================================================
 // finish

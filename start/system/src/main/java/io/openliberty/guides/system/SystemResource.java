@@ -12,10 +12,10 @@
  // end::copyright[]
 package io.openliberty.guides.system;
 
+import java.io.IOException;
+
 // CDI
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.ApplicationScoped;
-
 import javax.ws.rs.GET;
 // JAX-RS
 import javax.ws.rs.Path;
@@ -23,43 +23,26 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.eclipse.microprofile.faulttolerance.Fallback;
-import java.io.IOException;
-import org.eclipse.microprofile.faulttolerance.Retry;
-
-
-
-//@RequestScoped
-@ApplicationScoped
+@RequestScoped
 @Path("/properties")
 public class SystemResource {
 
-  private int count = 0;
-
-  @Fallback(fallbackMethod = "getPropertiesFallback")
-  @Retry(maxRetries=3, retryOn=IOException.class)
+	private static int count = 0;
+	
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getProperties() throws IOException {
-    count++;
-    getPropertiesWithException();
+	  count++;
+	  getPropertiesThrowException();
     return Response.ok(System.getProperties())
-        .header("X-Pod-Name", System.getenv("HOSTNAME"))
-        .header("X-From-Fallback", "no")
-        .build();
+      .header("X-Pod-Name", System.getenv("HOSTNAME"))
+      .build();
   } 
-
-public void getPropertiesWithException() throws IOException{
-  throw(new IOException("try"));
-}
-
-public Response getPropertiesFallback() {
-  return Response.ok(System.getProperties())
-        .header("X-Pod-Name", System.getenv("HOSTNAME"))
-        .header("X-From-Fallback", "yes")
-        .build(); 
-}
-
+  
+  public void getPropertiesThrowException() throws IOException {
+	  throw(new IOException("try"));
+  }
+  
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("count")  
@@ -67,5 +50,4 @@ public Response getPropertiesFallback() {
     return Response.ok(count)
       .build();
   }
-
 }
