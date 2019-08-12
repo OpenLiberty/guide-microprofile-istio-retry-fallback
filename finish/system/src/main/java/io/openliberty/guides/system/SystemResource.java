@@ -33,7 +33,9 @@ public class SystemResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getProperties() throws IOException {
 	  count++;
+    // tag::throwException[]
 	  getPropertiesThrowException();
+    // end::throwException[]
     return Response.ok(System.getProperties())
       .header("X-Pod-Name", System.getenv("HOSTNAME"))
       .build();

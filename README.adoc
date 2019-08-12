@@ -189,13 +189,29 @@ any additional steps for the sidecars to be injected.
 
 Navigate to the `start` directory to begin.
 
-The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot file=0]`pom.xml` file. Look for
+The MicroProfile Fault Tolerance API was added as a dependency to your `inventory` service's [hotspot file=0]`pom.xml` file. Look for
 the dependency with the [hotspot=mpFaultTolerance file=0]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the
 fault tolerance policies in your microservices.
 
-You can also find the [hotspot=9 file=1]`mpFaultTolerance` feature in your [hotspot file=1]`src/main/liberty/config/server.xml` server configuration,
+You can also find the [hotspot=mpFaultTolerance2 file=1]`mpFaultTolerance` feature in your inventory [hotspot file=1]`server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
+Next, the [hotspot file=2]`inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
+makes a request to the `system` service through the MicroProfile Rest Client API.
+If you want to learn more about MicroProfile Rest Client,
+you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide.
+The `system` service as described in the [hotspot file=3]`SystemResource.java` file calls the [hotspot=throwException file=3]`getPropertiesThrowException()`
+function which throws an `IOException`, as a 500 status code, to simulate that the system is unavailable.
+
+
+
+
+
+SystemResource.java
+[source, java, linenums, role='code_column']
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemResource.java[]
+----
 
 server.xml
 [source, xml, linenums, role='code_column']

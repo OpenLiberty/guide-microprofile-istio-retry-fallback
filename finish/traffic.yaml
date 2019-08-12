@@ -30,5 +30,5 @@ spec:
           number: 9080
         host: inventory-service
     retries:
-      attempts: 4
+      attempts: 3
       retryOn: 5xx
