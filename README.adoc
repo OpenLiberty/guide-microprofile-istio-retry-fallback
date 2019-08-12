@@ -32,6 +32,12 @@ Explore how to manage the impact of failures using MicroProfile and Istio Fault 
 
 :kube: Kubernetes
 :istio: Istio
+:win: WINDOWS
+:mac: MAC
+:linux: LINUX
+:docker: Docker
+:minikube: Minikube
+:maven: Maven
 
 
 // =================================================================================================
