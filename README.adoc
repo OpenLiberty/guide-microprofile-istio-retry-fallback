@@ -84,8 +84,7 @@ You will add fault tolerance to the `inventory` service so that it reacts accord
 // Prerequisites
 // =================================================================================================
 
-== Prerequisites
-
+include::{common-includes}/kube-prereq.adoc[]
 
 // =================================================================================================
 // Getting Started
@@ -94,11 +93,87 @@ You will add fault tolerance to the `inventory` service so that it reacts accord
 [role='command']
 include::{common-includes}/gitclone.adoc[]
 
+// no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
+
 // =================================================================================================
-// Deploying Istio
+// Preparing your cluster and deploying Istio
 // =================================================================================================
 
-== Deploying Istio
+== Preparing your cluster and deploying Istio
+
+=== Starting your cluster
+
+:minikube-start: minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.13.0
+:docker-desktop-description: Check your settings to ensure that you have an adequate amount of memory allocated to your Docker Desktop enviornment, 8GB is recommended but 4GB should be adequate if you don't have enough RAM.
+:minikube-description: The memory flag allocates 8GB of memory to your Minikube cluster. If you don't have enough RAM, then 4GB should be adequate.
+[role=command]
+include::{common-includes}/kube-start.adoc[]
+
+=== Deploying Istio
+
+First, go to the https://github.com/istio/istio/releases/latest[{istio} release page^] and download the latest stable release. Extract the archive and navigate to the directory with the extracted files.
+
+Next, deploy the {istio} custom resource definitions. Custom resource definitions allow {istio} to define custom {kube} resources that you can use in your resource definition files.
+
+****
+[system]#*{linux} | {mac}*#
+
+[role=command]
+```
+for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
+```
+
+[system]#*{win}*#
+[role=command]
+```
+FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl apply -f %i
+```
+****
+
+Next, deploy {istio} resources to your cluster by running the `kubectl apply` command, which creates or updates
+{kube} resources defined in a yaml file. This command deploys {istio}.
+
+[role=command]
+```
+kubectl apply -f install/kubernetes/istio-demo.yaml
+```
+
+Verify that {istio} was successfully deployed. All the values in the `AVAILABLE` column will have a value of `1` after
+the deployment is complete.
+
+[role=command]
+```
+kubectl get deployments -n istio-system
+```
+ 
+Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. On Docker Desktop, you can increase the memory from your {docker} preferences. On {minikube}, you can increase the memory using the `--memory` flag.
+[source, role="no_copy"]
+----
+NAME                     DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+grafana                  1         1         1            1           44s
+istio-citadel            1         1         1            1           44s
+istio-egressgateway      1         1         1            1           44s
+istio-galley             1         1         1            1           44s
+istio-ingressgateway     1         1         1            1           44s
+istio-pilot              1         1         1            1           44s
+istio-policy             1         1         1            1           44s
+istio-sidecar-injector   1         1         1            1           44s
+istio-telemetry          1         1         1            1           44s
+istio-tracing            1         1         1            1           43s
+prometheus               1         1         1            1           44s
+servicegraph             1         1         1            1           44s
+----
+
+Finally, create the `istio-injection` label and set its value to `enabled`.
+
+[role=command]
+```
+kubectl label namespace default istio-injection=enabled
+```
+
+Adding this label enables automatic {istio} sidecar injection. Automatic injection means that sidecars will
+automatically be injected into your pods when you deploy your application. You don't need to perform
+any additional steps for the sidecars to be injected.
 
 // =================================================================================================
 // Enabling MicroProfile fault tolerance
@@ -106,6 +181,27 @@ include::{common-includes}/gitclone.adoc[]
 
 == Enabling MicroProfile fault tolerance
 
+Navigate to the `start` directory to begin.
+
+The MicroProfile Fault Tolerance API was added as a dependency to your [hotspot file=0]`pom.xml` file. Look for
+the dependency with the [hotspot=mpFaultTolerance file=0]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the
+fault tolerance policies in your microservices.
+
+You can also find the [hotspot=9 file=1]`mpFaultTolerance` feature in your [hotspot file=1]`src/main/liberty/config/server.xml` server configuration,
+which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
+
+
+server.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/inventory/src/main/liberty/config/server.xml[]
+----
+
+pom.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/inventory/pom.xml[]
+----
 
 // =================================================================================================
 // finish

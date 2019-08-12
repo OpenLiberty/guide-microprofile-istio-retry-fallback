@@ -59,7 +59,9 @@
         </dependency>
         <dependency>
            <groupId>io.openliberty.features</groupId>
+            <!-- tag::mpFaultTolerance[] -->
            <artifactId>mpFaultTolerance-2.0</artifactId>
+           <!-- end::mpFaultTolerance[] -->
            <type>esa</type>
            <scope>provided</scope>
         </dependency>  
