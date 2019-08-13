@@ -44,8 +44,12 @@ public class InventoryResource {
   @Path("/{hostname}")
   @Produces(MediaType.APPLICATION_JSON)
   //@Fallback(fallbackMethod = "getPropertiesFallback")
+  // tag::mpRetry[]
   @Retry(maxRetries=3, retryOn=IOException.class)
+  // end::mpRetry[]
+  // tag::getPropertiesForHost[]
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws IOException {
+  // end::getPropertiesForHost[]
     // Get properties for host
     Properties props = systemClient.getProperties(hostname);
     if (props == null) {

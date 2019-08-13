@@ -16,7 +16,7 @@
 :page-description: Explore how to use Fault Tolerance with MicroProfile and Istio
 :page-tags: ['Kubernetes']
 :page-permalink: /guides/{projectid}
-:page-related-guides: ['istio-intro', 'microprofile-fallback']
+:page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :page-seo-title: Retry and Fallback with MicroProfile and Istio Fault Tolerance
@@ -194,13 +194,12 @@ fault tolerance policies in your microservices.
 You can also find the [hotspot=mpFaultTolerance2 file=1]`mpFaultTolerance` feature in your inventory [hotspot file=1]`server.xml` server configuration,
 which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
 
-Next, the [hotspot file=2]`inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java` file
+Next, the [hotspot file=2]`SystemClient.java` file
 makes a request to the `system` service through the MicroProfile Rest Client API.
 If you want to learn more about MicroProfile Rest Client,
 you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide.
 The `system` service as described in the [hotspot file=3]`SystemResource.java` file calls the [hotspot=throwException file=3]`getPropertiesThrowException()`
 function which throws an `IOException`, as a 500 status code, to simulate that the system is unavailable.
-
 
 
 pom.xml
@@ -218,20 +217,110 @@ include::finish/inventory/src/main/liberty/config/server.xml[]
 SystemClient.java
 [source, java, linenums, role='code_column']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=**;!copyright]
 ----
 
 SystemResource.java
 [source, java, linenums, role='code_column']
 ----
-include::finish/system/src/main/java/io/openliberty/guides/system/SystemResource.java[]
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=**;!copyright]
 ----
+
+=== Adding the MicroProfile @Retry annotation
+
+A request to a service might fail for many different reasons. The default Retry policy initiates a retry for every `java.lang.Exception`. 
+However, you can base a Retry policy on a specific exception by using the `retryOn` parameter. You can identify more than one exception 
+as an array of values. For example, `@Retry(retryOn = {RuntimeException.class, TimeoutException.class})`.
+
+You can set limits on the number of retry attempts to prevent a busy service from becoming overloaded with retry requests.
+The `@Retry` annotation has the `maxRetries` parameter to limit the number of retry attempts. The default number for `maxRetries` is 3 requests.
+The integer value must be greater than or equal to -1. A value of -1 indicates to continue retrying indefinitely.
+
+[role="code_command hotspot", subs="quotes"]
+----
+#Update the `InventoryResource.java` file.#
+`InventoryResource.java`
+----
+finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java
+[source, yaml, linenums, role='code_column']
+----
+include::inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright]
+----
+[role="edit_command_text"]
+Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
+to retry the service request a maximum of 3 times, only when an `IOException` occurs.
+
+=== Building and running the application
+
+The starting Java project, which you can find in the `start` directory, is a multi-module Maven
+project. It is made up of the `system` and `inventory` microservices. Each microservice resides in its own directory,
+`start/system` and `start/inventory`. Both of these directories contain a Dockerfile, which is necessary
+for building the Docker images. If you're unfamiliar with Dockerfiles, check out the
+https://openliberty.io/guides/containerize.html[Containerizing microservices^] guide.
+
+The `mvn package` command builds the application and then packages it into a Docker image. 
+To build the Docker image, it uses the `dockerfile-maven` plug-in.
+
+****
+[system]#*{win}*#
+
+On the Docker Desktop General Setting page, ensure that the option `Expose daemon on 
+tcp://localhost:2375 without TLS` is enabled. This configuration is required by the `dockerfile-maven` 
+part of the build.
+
+****
+
+Navigate to the `start` directory and run the following command:
+
+[role=command]
+```
+mvn package
+```
+
+To verify that the images for your `system` and `inventory` microservices are built, run the `docker images` command to list all local Docker images.
+
+[role=command]
+```
+docker images
+```
+
+Your two images `system` and `inventory` should appear in the list of all Docker images:
+
+[role="no_copy"]
+----
+REPOSITORY    TAG         
+inventory     1.0-SNAPSHOT
+system        1.0-SNAPSHOT
+----
+
+To deploy your microservices to the Kubernetes cluster, use the following command:
+
+[role=command]
+```
+kubectl apply -f kubernetes.yaml
+```
+
+You will see an output similar to the following:
+
+[role="no_copy"]
+----
+service/system-service created
+service/inventory-service created
+deployment.apps/system-deployment created
+deployment.apps/inventory-deployment created
+gateway.networking.istio.io/sys-app-gateway created
+----
+
+
 
 // =================================================================================================
 // finish
 // =================================================================================================
 
 == Great work! You're done!
+
+You learned how to use the Retry policy to make your microservice more resilient to failures 
+and how to build a fallback mechanism for your microservices.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 
