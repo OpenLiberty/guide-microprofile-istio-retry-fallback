@@ -69,6 +69,7 @@ spec:
         - configMapRef:
             name: inventory-config
 ---
+# tag::gateway[]
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -84,3 +85,4 @@ spec:
     hosts:
     - "system.example.com"
     - "inventory.example.com"
+# end::gateway[]

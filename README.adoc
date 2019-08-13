@@ -48,7 +48,7 @@ Explore how to manage the impact of failures using MicroProfile and Istio Fault 
 
 
 You will learn how to combine https://microprofile.io/[MicroProfile^] Retry and Fallback policies with https://istio.io/[Istio^] Retry 
-to make your microservices more resilient to common failures like network problems or an `IOException`.
+to make your microservices more resilient to common failures like network problems.
 
 Microservices that are created using MicroProfile can be freely deployed in a service mesh architecture to reduce the complexity 
 associated with microservice functionality. Istio is a service mesh, meaning that it’s a platform for managing how microservices interact with each other and the outside world.
@@ -198,8 +198,12 @@ Next, the [hotspot file=2]`SystemClient.java` file
 makes a request to the `system` service through the MicroProfile Rest Client API.
 If you want to learn more about MicroProfile Rest Client,
 you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide.
-The `system` service as described in the [hotspot file=3]`SystemResource.java` file calls the [hotspot=throwException file=3]`getPropertiesThrowException()`
-function which throws an `IOException`, as a 500 status code, to simulate that the system is unavailable.
+To simulate that your `system` service is temporarily down, due to brief intermittent issues, any requests made to your `system` service 
+have to wait for a long time. A [hotspot=timeout file=3]`Timeout` policy was applied to limit the time your `inventory` service's request 
+to your `system` service waits to 2000 milliseconds. 
+The `@Timeout` annotation helps by ending requests that have taken too long and are unlikely to return successfully
+
+
 
 
 pom.xml
@@ -220,35 +224,11 @@ SystemClient.java
 include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=**;!copyright]
 ----
 
-SystemResource.java
+InventoryResource.java
 [source, java, linenums, role='code_column']
 ----
-include::finish/system/src/main/java/io/openliberty/guides/system/SystemResource.java[tags=**;!copyright]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright]
 ----
-
-=== Adding the MicroProfile @Retry annotation
-
-A request to a service might fail for many different reasons. The default Retry policy initiates a retry for every `java.lang.Exception`. 
-However, you can base a Retry policy on a specific exception by using the `retryOn` parameter. You can identify more than one exception 
-as an array of values. For example, `@Retry(retryOn = {RuntimeException.class, TimeoutException.class})`.
-
-You can set limits on the number of retry attempts to prevent a busy service from becoming overloaded with retry requests.
-The `@Retry` annotation has the `maxRetries` parameter to limit the number of retry attempts. The default number for `maxRetries` is 3 requests.
-The integer value must be greater than or equal to -1. A value of -1 indicates to continue retrying indefinitely.
-
-[role="code_command hotspot", subs="quotes"]
-----
-#Update the `InventoryResource.java` file.#
-`InventoryResource.java`
-----
-finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java
-[source, yaml, linenums, role='code_column']
-----
-include::inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright]
-----
-[role="edit_command_text"]
-Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
-to retry the service request a maximum of 3 times, only when an `IOException` occurs.
 
 === Building and running the application
 
@@ -311,7 +291,79 @@ deployment.apps/inventory-deployment created
 gateway.networking.istio.io/sys-app-gateway created
 ----
 
+Check that all of the deployments are available:
 
+[role=command]
+```
+kubectl get deployments
+```
+
+Wait until all of your deployments are ready and available before making requests to your microservices.
+
+[source, role="no_copy"]
+----
+NAME                     READY     UP-TO-DATE   AVAILABLE   AGE
+inventory-deployment     1         1            1           1m
+system-deployment        1         1            1           1m
+----
+
+You will make a request to the `system` service from the `inventory` service to access the 
+JVM system properties of your running container. The Istio [hotspot=gateway file=0]`gateway` is the entry point for HTTP requests to the cluster. 
+The `Host` header of your `system` service and `inventory` service to be `system.example.com` and `inventory.example.com`, respectively. 
+You can set the `Host` header with the `-H` option of the `curl` command.
+
+****
+[system]#*{win} | {mac}*#
+
+
+[role=command]
+```
+curl -H Host:inventory.example.com -I http://localhost/inventory/systems/system-service
+```
+
+[system]#*{linux}*#
+
+Make a request to the service by using `curl`.
+
+[role=command]
+```
+curl -H Host:inventory.example.com" -I http://`minikube ip`/inventory/systems/system-service
+```
+****
+
+
+
+
+kubernetes.yaml
+[source, yaml, linenums, role='code_column']
+----
+include::finish/kubernetes.yaml[]
+----
+
+
+=== Adding the MicroProfile @Retry annotation
+
+A request to a service might fail for many different reasons. The default Retry policy initiates a retry for every `java.lang.Exception`. 
+However, you can base a Retry policy on a specific exception by using the `retryOn` parameter. You can identify more than one exception 
+as an array of values. For example, `@Retry(retryOn = {RuntimeException.class, TimeoutException.class})`.
+
+You can set limits on the number of retry attempts to prevent a busy service from becoming overloaded with retry requests.
+The `@Retry` annotation has the `maxRetries` parameter to limit the number of retry attempts. The default number for `maxRetries` is 3 requests.
+The integer value must be greater than or equal to -1. A value of -1 indicates to continue retrying indefinitely.
+
+[role="code_command hotspot", subs="quotes"]
+----
+#Update the `InventoryResource.java` file.#
+`InventoryResource.java`
+----
+finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java
+[source, java, linenums, role='code_column']
+----
+include::inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright]
+----
+[role="edit_command_text"]
+Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
+to retry the service request a maximum of 4 times, only when an `TimeoutException` occurs.
 
 // =================================================================================================
 // finish

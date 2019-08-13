@@ -26,6 +26,9 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
+
 
 import io.openliberty.guides.inventory.model.InventoryList;
 import io.openliberty.guides.inventory.client.SystemClient;
@@ -45,10 +48,13 @@ public class InventoryResource {
   @Produces(MediaType.APPLICATION_JSON)
   //@Fallback(fallbackMethod = "getPropertiesFallback")
   // tag::mpRetry[]
-  @Retry(maxRetries=3, retryOn=IOException.class)
+  @Retry(maxRetries=4, retryOn=TimeoutException.class)
   // end::mpRetry[]
+  // tag::timeout[]
+  @Timeout(2000)
+  // end::timeout[]
   // tag::getPropertiesForHost[]
-  public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws IOException {
+  public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws Exception {
   // end::getPropertiesForHost[]
     // Get properties for host
     Properties props = systemClient.getProperties(hostname);

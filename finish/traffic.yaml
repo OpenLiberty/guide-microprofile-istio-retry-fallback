@@ -13,6 +13,10 @@ spec:
         port:
           number: 9080
         host: system-service
+    # fault:
+    #   delay:
+    #     percent: 100
+    #     fixedDelay: 10s
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -30,5 +34,6 @@ spec:
           number: 9080
         host: inventory-service
     retries:
-      attempts: 3
+      attempts: 4
       retryOn: 5xx
+    #timeout: 2s

@@ -24,6 +24,8 @@ import java.util.Properties;
 import java.io.IOException;
 import java.net.URI;
 
+import org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException;
+
 @RequestScoped
 public class SystemClient {
 
@@ -33,7 +35,7 @@ public class SystemClient {
   private final String PROTOCOL = "http";
 
   // Wrapper function that gets properties
-  public Properties getProperties(String hostname) throws IOException {
+  public Properties getProperties(String hostname) throws TimeoutException {
     String url = buildUrl(PROTOCOL, hostname, DEFAULT_PORT, SYSTEM_PROPERTIES);
     Builder clientBuilder = buildClientBuilder(url);
     return getPropertiesHelper(clientBuilder);
@@ -76,20 +78,20 @@ public class SystemClient {
   }
 
   // Helper method that processes the request
-  protected Properties getPropertiesHelper(Builder builder) throws IOException {
+  protected Properties getPropertiesHelper(Builder builder){
     //try {
       Response response = builder.get();
       if (response.getStatus() == Status.OK.getStatusCode()) {
         return response.readEntity(Properties.class);
       } else {
         System.err.println("Response Status is not OK. Status: " + response.getStatus());
-        throw new IOException("Response Status is not OK. Status: " + response.getStatus());
       }
     //} catch (RuntimeException e) {
     //  System.err.println("Runtime exception: " + e.getMessage());
     //} catch (Exception e) {
     //  System.err.println("Exception thrown while invoking the request: " + e.getMessage());
     //}
+    return null;
   }
 
 }
