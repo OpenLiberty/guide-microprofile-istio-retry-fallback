@@ -63,7 +63,7 @@ A few fault tolerance policies that MicroProfile can offer include Retry, Timeou
 There is some overlap that exists between MicroProfile and Istio Fault Tolerance, such as the Retry policy.
 However, Istio does not offer any fallback capabilities.
 To view the available fault tolerance policies in MicroProfile and Istio, refer to the 
-https://www.eclipse.org/community/eclipse_newsletter/2018/september/MicroProfile_istio.php#faulttolerance[comparison between MicroProfile and Istio fault handling].
+https://www.eclipse.org/community/eclipse_newsletter/2018/september/MicroProfile_istio.php#faulttolerance[comparison between MicroProfile and Istio fault handling^].
 
 Use the Retry policy to fail quickly and recover from brief intermittent issues. 
 An application might experience these transient failures when a microservice is undeployed, a database is overloaded by queries, 
@@ -107,13 +107,11 @@ include::{common-includes}/gitclone.adoc[]
 
 == Preparing your cluster and deploying Istio
 
-=== Starting your cluster
-
 :minikube-start: minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.13.0
 :docker-desktop-description: Check your settings to ensure that you have an adequate amount of memory allocated to your Docker Desktop enviornment, 8GB is recommended but 4GB should be adequate if you don't have enough RAM.
 :minikube-description: The memory flag allocates 8GB of memory to your Minikube cluster. If you don't have enough RAM, then 4GB should be adequate.
 [role=command]
-include::{common-includes}/kube-start.adoc[]
+include::{common-includes}/kube-start.adoc[leveloffset=+1]
 
 === Deploying Istio
 
@@ -205,12 +203,10 @@ function which throws an `IOException`, as a 500 status code, to simulate that t
 
 
 
-
-
-SystemResource.java
-[source, java, linenums, role='code_column']
+pom.xml
+[source, xml, linenums, role='code_column']
 ----
-include::finish/system/src/main/java/io/openliberty/guides/system/SystemResource.java[]
+include::finish/inventory/pom.xml[]
 ----
 
 server.xml
@@ -219,10 +215,16 @@ server.xml
 include::finish/inventory/src/main/liberty/config/server.xml[]
 ----
 
-pom.xml
-[source, xml, linenums, role='code_column']
+SystemClient.java
+[source, java, linenums, role='code_column']
 ----
-include::finish/inventory/pom.xml[]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[]
+----
+
+SystemResource.java
+[source, java, linenums, role='code_column']
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemResource.java[]
 ----
 
 // =================================================================================================
