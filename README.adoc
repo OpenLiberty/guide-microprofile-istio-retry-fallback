@@ -12,7 +12,7 @@
 :projectid: microprofile-istio-retry
 :page-layout: guide-multipane
 :page-duration: 30 minutes
-:page-releasedate: 2019-08-01
+:page-releasedate: 2019-09-10
 :page-description: Explore how to use Fault Tolerance with MicroProfile and Istio
 :page-tags: ['Kubernetes']
 :page-permalink: /guides/{projectid}
@@ -201,7 +201,7 @@ you can follow the https://openliberty.io/guides/microprofile-rest-client.html[C
 To simulate that your `system` service is temporarily down, due to brief intermittent issues, any requests made to your `system` service 
 have to wait for a long time. A [hotspot=timeout file=3]`Timeout` policy was applied to limit the time your `inventory` service's request 
 to your `system` service waits to 2000 milliseconds. 
-The `@Timeout` annotation helps by ending requests that have taken too long and are unlikely to return successfully
+The `@Timeout` annotation helps by ending requests that have taken too long and are unlikely to return successfully.
 
 
 
@@ -291,6 +291,15 @@ deployment.apps/inventory-deployment created
 gateway.networking.istio.io/sys-app-gateway created
 ----
 
+View the `traffic.yaml` file. It contains two virtual services. A virtual service defines how requests are routed to your applications.
+
+Deploy the resources defined in the `traffic.yaml` file
+
+[role=command]
+```
+kubectl apply -f traffic.yaml
+```
+
 Check that all of the deployments are available:
 
 [role=command]
@@ -312,27 +321,40 @@ JVM system properties of your running container. The Istio [hotspot=gateway file
 The `Host` header of your `system` service and `inventory` service to be `system.example.com` and `inventory.example.com`, respectively. 
 You can set the `Host` header with the `-H` option of the `curl` command.
 
+Make a request to the service by using `curl`:
+
 ****
 [system]#*{win} | {mac}*#
 
 
 [role=command]
 ```
-curl -H Host:inventory.example.com -I http://localhost/inventory/systems/system-service
+curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
 ```
 
 [system]#*{linux}*#
 
-Make a request to the service by using `curl`.
 
 [role=command]
 ```
-curl -H Host:inventory.example.com" -I http://`minikube ip`/inventory/systems/system-service
+curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
 ```
 ****
 
+You will see the following output:
 
+[source, role="no_copy"]
+----
+HTTP/1.1 500 Internal Server Error
+content-length: 18
+content-type: text/plain
+date: Thu, 15 Aug 2019 13:21:57 GMT
+server: istio-envoy
+----
 
+The request returns a `500` response code, as the `system` service is unavailable.
+This is because the request timed out and the `@Timeout` annotation returned a `TimeoutException`.
+You will implement a Retry policy to retry the request to the `system` service. 
 
 kubernetes.yaml
 [source, yaml, linenums, role='code_column']
@@ -351,6 +373,8 @@ You can set limits on the number of retry attempts to prevent a busy service fro
 The `@Retry` annotation has the `maxRetries` parameter to limit the number of retry attempts. The default number for `maxRetries` is 3 requests.
 The integer value must be greater than or equal to -1. A value of -1 indicates to continue retrying indefinitely.
 
+To retry the requests to your `system` service after a `TimeoutException` has occurred, add the `@Retry` annotation.
+
 [role="code_command hotspot", subs="quotes"]
 ----
 #Update the `InventoryResource.java` file.#
@@ -359,11 +383,224 @@ The integer value must be greater than or equal to -1. A value of -1 indicates t
 finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java
 [source, java, linenums, role='code_column']
 ----
-include::inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright]
 ----
 [role="edit_command_text"]
 Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
-to retry the service request a maximum of 4 times, only when an `TimeoutException` occurs.
+to retry the service request a maximum of 3 times, only when an `TimeoutException` occurs.
+
+Rebuild your application to integrate the Retry policy into your microservices:
+
+[role=command]
+```
+mvn package -Ddockerfile.skip=true
+```
+
+The `dockerfile.skip=true` flag skips rebuilding the Docker images, since they were not modified.
+
+Deploy your microservices again:
+
+[role=command]
+```
+kubectl apply -f kubernetes.yaml
+kubectl apply -f traffic.yaml
+```
+
+Make a request to the service by using `curl`:
+
+****
+[system]#*{win} | {mac}*#
+
+
+[role=command]
+```
+curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
+```
+
+[system]#*{linux}*#
+
+
+[role=command]
+```
+curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+```
+****
+
+You will see the following output:
+
+[source, role="no_copy"]
+----
+HTTP/1.1 200 OK
+x-powered-by: Servlet/4.0
+content-type: application/json
+date: Thu, 15 Aug 2019 13:23:18 GMT
+content-language: en-US
+x-envoy-upstream-service-time: 2470
+server: istio-envoy
+transfer-encoding: chunked
+----
+
+After the request retries, the `system` service becomes available and the request is successful with a `200` response code.
+
+To see the number of times the service was retried:
+
+IN PROGRESS
+
+
+// =================================================================================================
+// Enabling Istio fault tolerance
+// =================================================================================================
+
+== Enabling Istio fault tolerance
+
+As mentioned before, you will add Istio fault handling to your microservices.
+
+You previously implemented the Retry policy to retry requests to your `system` service using MicroProfile Fault Tolerance.
+This Retry policy can also be implemented with Istio fault tolerance.
+
+[role="code_command hotspot", subs="quotes"]
+----
+#Update the `traffic.yaml` file.#
+`traffic.yaml`
+----
+finish/traffic.yaml
+[source, yaml, linenums, role='code_column']
+----
+include::finish/traffic.yaml[tags=**;!copyright]
+----
+[role="edit_command_text"]
+Add the [hotspot=istioRetry file=0]`retries` field in the [hotspot]`traffic.yaml` file, 
+
+
+
+=== Conflicts with MP Retry and Istio Retry
+
+
+=== Turning off MicroProfile Fault Tolerance
+
+Add config to kubernetes.yaml:
+
+Disable mp:
+
+[role=command]
+```
+kubectl apply -f config.yaml
+```
+
+
+
+=== Adding the MicroProfile @Fallback annotation
+
+
+
+// =================================================================================================
+// Testing the microservices
+// =================================================================================================
+
+== Testing the microservices
+
+[role="code_command hotspot", subs="quotes"]
+----
+#Create the `SystemEndpointTest` class.#
+`system/src/test/java/it/io/openliberty/guides/system/SystemEndpointTest.java`
+----
+SystemEndpointTest.java
+[source, Java, linenums, role='code_column']
+----
+include::finish/system/src/test/java/it/io/openliberty/guides/system/SystemEndpointTest.java[tags=**;!copyright]
+----
+
+****
+[system]#*{win} | {mac}*#
+
+Run the command to start the tests:
+
+[role=command]
+```
+mvn verify -Ddockerfile.skip=true
+```
+
+[system]#*{linux}*#
+
+Run the command to start the tests:
+
+[role=command]
+```
+mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip` -Dport=31380
+```
+
+The `cluster.ip` and `port` parameters refer to the IP address and port for the {istio} gateway.
+****
+
+The `dockerfile.skip=true` flag skips rebuilding the {docker} images.
+
+If the tests pass, then you should see output similar to the following example:
+
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.system.SystemEndpointTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.503 s - in it.io.openliberty.guides.system.SystemEndpointTest
+
+Results:
+
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+----
+
+
+
+// =================================================================================================
+// Tearing down your environment
+// =================================================================================================
+
+== Tearing down your environment
+
+You might want to teardown all the deployed resources as a cleanup step.
+
+Delete your resources from the cluster.
+
+[role=command]
+```
+kubectl delete -f kubernetes.yaml
+kubectl delete -f traffic.yaml
+kubectl delete -f config.yaml
+```
+
+Delete the `istio-injection` label from the default namespace. The hyphen immediately
+after the label name indicates that the label should be deleted.
+
+[role=command]
+```
+kubectl label namespace default istio-injection-
+```
+
+Navigate to the directory where you extracted {istio} and delete the {istio} resources from the cluster.
+
+[role=command]
+```
+kubectl delete -f install/kubernetes/istio-demo.yaml
+```
+
+****
+[system]#*{linux} | {mac}*#
+
+[role=command]
+```
+for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f $i; done
+```
+
+[system]#*{win}*#
+[role=command]
+```
+FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl delete -f %i
+```
+****
+
+
+[role=command]
+include::{common-includes}/kube-minikube-teardown.adoc[]
 
 // =================================================================================================
 // finish
