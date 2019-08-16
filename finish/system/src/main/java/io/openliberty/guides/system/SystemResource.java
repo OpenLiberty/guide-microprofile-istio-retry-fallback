@@ -12,12 +12,6 @@
  // end::copyright[]
 package io.openliberty.guides.system;
 
-import java.io.IOException;
-import java.lang.Thread;
-import java.lang.InterruptedException;
-
-
-
 // CDI
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.GET;
@@ -31,41 +25,11 @@ import javax.ws.rs.core.Response;
 @Path("/properties")
 public class SystemResource {
 
-	private static int count = 0;
-	
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getProperties() throws Exception {
-	  count++;
-    slow();
-    // tag::throwException[]
-	  //getPropertiesThrowException();
-    // end::throwException[]
+  public Response getProperties() {
     return Response.ok(System.getProperties())
       .header("X-Pod-Name", System.getenv("HOSTNAME"))
       .build();
   } 
-  
-  public void getPropertiesThrowException() throws IOException {
-	  throw(new IOException("try"));
-  }
-  
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("count")  
-  public Response getCount() {
-    return Response.ok(count)
-      .build();
-  }
-
-  private boolean slow() throws InterruptedException {
-    if (count==0 || Math.random() > 0.6) {
-        // sleep when count==0 so we know retry will happen at least once
-        // 0.6 - approx 40% chance it will sleep
-        // meaning that since maxRetries=4, 200 response should happen no matter what
-        Thread.sleep(2100);
-        return true;
-    }
-    return false;
-  }
 }

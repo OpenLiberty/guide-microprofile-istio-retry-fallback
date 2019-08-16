@@ -14,6 +14,7 @@ package io.openliberty.guides.inventory;
 
 import java.io.IOException;
 import java.util.Properties;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -26,6 +27,7 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.metrics.annotation.Counted;
 
 import io.openliberty.guides.inventory.model.InventoryList;
 import io.openliberty.guides.inventory.client.SystemClient;
@@ -33,6 +35,8 @@ import io.openliberty.guides.inventory.client.SystemClient;
 @RequestScoped
 @Path("/systems")
 public class InventoryResource {
+
+  private static int counter = 0;
 
   @Inject
   InventoryManager manager;
@@ -43,14 +47,13 @@ public class InventoryResource {
   @GET
   @Path("/{hostname}")
   @Produces(MediaType.APPLICATION_JSON)
-  //@Fallback(fallbackMethod = "getPropertiesFallback")
-  // tag::mpRetry[]
+  @Fallback(fallbackMethod = "getPropertiesFallback")
   @Retry(maxRetries=3, retryOn=IOException.class)
-  // end::mpRetry[]
-  // tag::getPropertiesForHost[]
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws IOException {
-  // end::getPropertiesForHost[]
-    // Get properties for host
+	 
+	counting();
+	
+	// Get properties for host
     Properties props = systemClient.getProperties(hostname);
     if (props == null) {
       return Response.status(Response.Status.NOT_FOUND)
@@ -64,6 +67,15 @@ public class InventoryResource {
     return Response.ok(props).build();
   }
 
+  @Counted(name = "countGetPropertiesForHost",
+		    absolute = true,
+		    description = "Number of times the getPropertiesForHost() being called")
+  public static int counting() {
+	  counter++;
+	  System.out.println("counting() is called. counter = " + counter);
+	  return 0;
+  }
+
   @Produces(MediaType.APPLICATION_JSON)
   public Response getPropertiesFallback(@PathParam("hostname") String hostname) {
 	  Properties props = new Properties();
@@ -71,6 +83,14 @@ public class InventoryResource {
 	    return Response.ok(props)
 	    	      .header("X-From-Fallback", "yes")
 	    	      .build();
+  }
+  
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("count")  
+  public Response getCount() {
+    return Response.ok(counter)
+      .build();
   }
   
   @GET

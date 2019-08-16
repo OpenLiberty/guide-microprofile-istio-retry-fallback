@@ -1,3 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: sys-app-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "system.example.com"
+    - "inventory.example.com"
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,7 +35,7 @@ metadata:
     app: inventory
 spec:
   ports:
-  - port: 9080
+  - port: 9081
     name: http
   selector:
     app: inventory
@@ -44,6 +60,9 @@ spec:
         image: system:1.0-SNAPSHOT
         ports:
         - containerPort: 9080
+#        envFrom:
+#        - configMapRef:
+#            name: service-config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -64,25 +83,7 @@ spec:
       - name: inventory-container
         image: inventory:1.0-SNAPSHOT
         ports:
-        - containerPort: 9080
+        - containerPort: 9081
         envFrom:
         - configMapRef:
             name: inventory-config
----
-# tag::gateway[]
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: sys-app-gateway
-spec:
-  selector:
-    istio: ingressgateway
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "system.example.com"
-    - "inventory.example.com"
-# end::gateway[]

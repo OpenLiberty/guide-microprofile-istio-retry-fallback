@@ -29,8 +29,10 @@
         <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
         <!-- OpenLiberty runtime -->
         <version.openliberty-runtime>RELEASE</version.openliberty-runtime>
-        <http.port>9080</http.port>
-        <https.port>9443</https.port>
+        <system.http.port>9080</system.http.port>
+        <system.https.port>9443</system.https.port>
+        <inventory.http.port>9081</inventory.http.port>
+        <inventory.https.port>9444</inventory.https.port>
         <!-- Default test properties -->
         <cluster.ip>localhost</cluster.ip>
         <system.kube.service>system-service</system.kube.service>

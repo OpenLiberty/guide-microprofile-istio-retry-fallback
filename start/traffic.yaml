@@ -13,6 +13,9 @@ spec:
         port:
           number: 9080
         host: system-service
+    retries:
+      attempts: 2
+      retryOn: 5xx
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -27,8 +30,8 @@ spec:
   - route:
     - destination:
         port:
-          number: 9080
+          number: 9081
         host: inventory-service
     retries:
-      attempts: 3
+      attempts: 4
       retryOn: 5xx

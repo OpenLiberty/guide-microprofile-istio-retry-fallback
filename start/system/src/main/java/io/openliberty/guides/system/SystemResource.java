@@ -12,8 +12,6 @@
  // end::copyright[]
 package io.openliberty.guides.system;
 
-import java.io.IOException;
-
 // CDI
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.GET;
@@ -27,29 +25,11 @@ import javax.ws.rs.core.Response;
 @Path("/properties")
 public class SystemResource {
 
-	private static int count = 0;
-	
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getProperties() throws IOException {
-	  count++;
-    // tag::throwException[]
-	  getPropertiesThrowException();
-    // end::throwException[]
+  public Response getProperties() {
     return Response.ok(System.getProperties())
       .header("X-Pod-Name", System.getenv("HOSTNAME"))
       .build();
   } 
-  
-  public void getPropertiesThrowException() throws IOException {
-	  throw(new IOException("try"));
-  }
-  
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("count")  
-  public Response getCount() {
-    return Response.ok(count)
-      .build();
-  }
 }
