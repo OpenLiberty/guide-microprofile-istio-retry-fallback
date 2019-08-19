@@ -217,9 +217,9 @@ include::finish/inventory/src/main/liberty/config/server.xml[]
 ----
 
 SystemClient.java
-[source, java, linenums, role='code_column']
+[source, Java, linenums, role='code_column']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=**;!copyright]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=**;!copyright;]
 ----
 
 === Building and running the application
@@ -283,9 +283,9 @@ deployment.apps/inventory-deployment created
 gateway.networking.istio.io/sys-app-gateway created
 ----
 
-View the `traffic.yaml` file. It contains two virtual services. A virtual service defines how requests are routed to your applications.
+The `traffic.yaml` file contains two virtual services. A virtual service defines how requests are routed to your applications.
 
-Deploy the resources defined in the `traffic.yaml` file
+Deploy the resources defined in the `traffic.yaml` file:
 
 [role=command]
 ```
@@ -389,19 +389,20 @@ The integer value must be greater than or equal to -1. A value of -1 indicates t
 
 To retry the requests to your `system` service after an `IOException` has occurred, add the `@Retry` annotation.
 
-[role="code_command hotspot", subs="quotes"]
+[role="code_command hotspot=mpRetry hotspot=getPropertiesForHost", subs="quotes"]
 ----
 #Update the `InventoryResource.java` file.#
-`InventoryResource.java`
-----
-finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java
-[source, java, linenums, role='code_column']
-----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright]
+`inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java`
 ----
 [role="edit_command_text"]
 Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
 to retry the service request a maximum of 3 times, only when an `IOException` occurs.
+
+InventoryResource.java
+[source, Java, linenums, role='code_column']
+----
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright;]
+----
 
 If the resources in your cluster are still running from before, delete them before proceeding:
 
@@ -504,7 +505,7 @@ kubectl delete -f traffic.yaml
 #Update the `traffic.yaml` file.#
 `traffic.yaml`
 ----
-finish/traffic.yaml
+traffic.yaml
 [source, yaml, linenums, role='code_column']
 ----
 include::finish/traffic.yaml[]
@@ -618,14 +619,14 @@ annotations, including `@Retry`, will switch off and only keep `@Fallback` avail
 You will use the `MP_Fault_Tolerance_NonFallback_Enabled` config property to disable the retries performed by MicroProfile, 
 to only allow Istio to perform the retries.
 
-[role="code_command hotspot file=0", subs="quotes"]
+[role="code_command hotspot", subs="quotes"]
 ----
 #Create the `config.yaml`.#
 `config.yaml`
 ----
 
 config.yaml
-[source, Text, linenums, indent=0, role="code_column"]
+[source, yaml, linenums, indent=0, role="code_column"]
 ----
 include::finish/config.yaml[]
 ----
@@ -639,14 +640,15 @@ used by the pod's containers. The environment variables are defined in the pod's
 #Update the `istio.yaml` file.#
 `istio.yaml`
 ----
-finish/istio.yaml
+[role="edit_command_text"]
+To inject the [hotspot=configMap file=0]`ConfigMap` with the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` property into your pods, 
+add the [hotspot=invConfig file=1]`envFrom` field in the [hotspot file=1]`istio.yaml` file. 
+
+istio.yaml
 [source, yaml, linenums, role='code_column']
 ----
 include::finish/istio.yaml[]
 ----
-[role="edit_command_text"]
-To inject the [hotspot=configMap file=0]`ConfigMap` with the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` property into your pods, 
-add the [hotspot=invConfig file=1]`envFrom` field in the [hotspot file=1]`istio.yaml` file. 
 
 The [hotspot=configName file=0]`name` of the [hotspot=configMap file=0]`ConfigMap`, which is [hotspot=configName file=0]`inventory-config`, 
 becomes the environment variable [hotspot=configName2 file=1]`name` that is specified in the [hotspot=invConfig file=1]`envFrom` field. 
@@ -744,21 +746,21 @@ to add fallback to your microservices.
 The `@Fallback` annotation dictates a method to call when the original method encounters a failed execution. 
 If your microservices have a Retry policy specified, then the fallback occurs after all of the retries have failed. 
 
-[role="code_command hotspot", subs="quotes"]
+[role="code_command hotspot=fallbackMethod hotspot=fallback hotspot=getPropertiesForHost", subs="quotes"]
 ----
 #Update the `InventoryResource.java` file.#
-`InventoryResource.java`
-----
-finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java
-[source, java, linenums, role='code_column']
-----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright]
+`inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java`
 ----
 [role="edit_command_text"]
 Create the [hotspot=fallbackMethod file=0]`getPropertiesFallback()` method. 
 Add the [hotspot=fallback file=0]`@Fallback` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
 to call the [hotspot=fallbackMethod file=0]`getPropertiesFallback()` method when a failure occurs.
 
+InventoryResource.java
+[source, Java, linenums, role='code_column']
+----
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright;]
+----
 
 The [hotspot=fallbackMethod file=0]`getPropertiesFallback()` method, which is the designated fallback method for the original 
 [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, prints out a warning message in the browser saying that 
