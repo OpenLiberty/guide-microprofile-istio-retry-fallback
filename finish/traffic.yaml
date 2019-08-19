@@ -13,9 +13,15 @@ spec:
         port:
           number: 9080
         host: system-service
+    # tag::istioRetry[]
     retries:
+      # tag::attempts[]
       attempts: 2
+      # end::attempts[]
+      # tag::retryOn[]
       retryOn: 5xx
+      # end::retryOn[]
+    # end::istioRetry[]
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -32,6 +38,6 @@ spec:
         port:
           number: 9081
         host: inventory-service
-    retries:
-      attempts: 4
-      retryOn: 5xx
+    # retries:
+    #   attempts: 4
+    #   retryOn: 5xx
