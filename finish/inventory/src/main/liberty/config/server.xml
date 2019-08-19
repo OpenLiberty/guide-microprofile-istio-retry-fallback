@@ -17,7 +17,5 @@
   <webApplication location="inventory.war" contextRoot="/"/>
   
   <mpMetrics authentication="false"/>
-  
-  <!-- logging traceSpecification="*=info:com.ibm.ws.microprofile.metrics.impl.CounterImpl=debug"/ -->
-  
+    
 </server>

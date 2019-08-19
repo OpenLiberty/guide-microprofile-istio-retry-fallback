@@ -62,9 +62,6 @@ spec:
         image: system:1.0-SNAPSHOT
         ports:
         - containerPort: 9080
-#        envFrom:
-#        - configMapRef:
-#            name: service-config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -86,10 +83,3 @@ spec:
         image: inventory:1.0-SNAPSHOT
         ports:
         - containerPort: 9081
-        # tag::invConfig[]
-        envFrom:
-        - configMapRef:
-            # tag::configName2[]
-            name: inventory-config
-            # end::configName2[]
-        # end::invConfig[]

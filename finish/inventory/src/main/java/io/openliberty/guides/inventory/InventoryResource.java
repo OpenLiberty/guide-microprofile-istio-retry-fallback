@@ -36,8 +36,6 @@ import io.openliberty.guides.inventory.client.SystemClient;
 @Path("/systems")
 public class InventoryResource {
 
-  private static int counter = 0;
-
   @Inject
   InventoryManager manager;
 
@@ -56,7 +54,6 @@ public class InventoryResource {
   // tag::getPropertiesForHost[]
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws IOException {
 	// end::getPropertiesForHost[] 
-	counting();
 	
 	// Get properties for host
     Properties props = systemClient.getProperties(hostname);
@@ -72,14 +69,6 @@ public class InventoryResource {
     return Response.ok(props).build();
   }
 
-  @Counted(name = "countGetPropertiesForHost",
-		    absolute = true,
-		    description = "Number of times the getPropertiesForHost() being called")
-  public static int counting() {
-	  counter++;
-	  System.out.println("counting() is called. counter = " + counter);
-	  return 0;
-  }
   // tag::fallbackMethod[]
   @Produces(MediaType.APPLICATION_JSON)
   public Response getPropertiesFallback(@PathParam("hostname") String hostname) {
@@ -90,13 +79,6 @@ public class InventoryResource {
 	    	      .build();
   }
   // end::fallbackMethod[]
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("count")  
-  public Response getCount() {
-    return Response.ok(counter)
-      .build();
-  }
   
   @GET
   @Produces(MediaType.APPLICATION_JSON)

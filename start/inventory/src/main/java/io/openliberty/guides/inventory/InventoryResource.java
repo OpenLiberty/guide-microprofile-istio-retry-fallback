@@ -36,8 +36,6 @@ import io.openliberty.guides.inventory.client.SystemClient;
 @Path("/systems")
 public class InventoryResource {
 
-  private static int counter = 0;
-
   @Inject
   InventoryManager manager;
 
@@ -47,16 +45,9 @@ public class InventoryResource {
   @GET
   @Path("/{hostname}")
   @Produces(MediaType.APPLICATION_JSON)
-  // tag::fallback[]
-  //@Fallback(fallbackMethod = "getPropertiesFallback")
-  // end::fallback[]
-  // tag::mpRetry[]
-  @Retry(maxRetries=3, retryOn=IOException.class)
-  // end::mpRetry[]
   // tag::getPropertiesForHost[]
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws IOException {
 	// end::getPropertiesForHost[] 
-	counting();
 	
 	// Get properties for host
     Properties props = systemClient.getProperties(hostname);
@@ -70,32 +61,6 @@ public class InventoryResource {
     // Add to inventory
     manager.add(hostname, props);
     return Response.ok(props).build();
-  }
-
-  @Counted(name = "countGetPropertiesForHost",
-		    absolute = true,
-		    description = "Number of times the getPropertiesForHost() being called")
-  public static int counting() {
-	  counter++;
-	  System.out.println("counting() is called. counter = " + counter);
-	  return 0;
-  }
-  // tag::fallbackMethod[]
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getPropertiesFallback(@PathParam("hostname") String hostname) {
-	  Properties props = new Properties();
-	  props.put("error", "Unknown hostname or the system service may not be running.");
-	    return Response.ok(props)
-	    	      .header("X-From-Fallback", "yes")
-	    	      .build();
-  }
-  // end::fallbackMethod[]
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("count")  
-  public Response getCount() {
-    return Response.ok(counter)
-      .build();
   }
   
   @GET

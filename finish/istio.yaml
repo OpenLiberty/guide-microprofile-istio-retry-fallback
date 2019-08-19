@@ -62,9 +62,6 @@ spec:
         image: system:1.0-SNAPSHOT
         ports:
         - containerPort: 9080
-#        envFrom:
-#        - configMapRef:
-#            name: service-config
 ---
 apiVersion: apps/v1
 kind: Deployment

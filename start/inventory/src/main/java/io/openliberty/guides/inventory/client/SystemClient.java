@@ -79,7 +79,6 @@ public class SystemClient {
   // tag::getPropertiesHelper[]
   protected Properties getPropertiesHelper(Builder builder) throws IOException {
 	  
-    //try {
       Response response = builder.get();
       if (response.getStatus() == Status.OK.getStatusCode()) {
         return response.readEntity(Properties.class);
@@ -89,12 +88,6 @@ public class SystemClient {
         throw new IOException("Response Status is not OK. Status = " + response.getStatus());
         // end::throwIO[]
       }
-    //} catch (RuntimeException e) {
-    //  System.err.println("Runtime exception: " + e.getMessage());
-    //} catch (Exception e) {
-    //  System.err.println("Exception thrown while invoking the request: " + e.getMessage());
-    //}
-    //return null;
   }
   // end::getPropertiesHelper[]
 
