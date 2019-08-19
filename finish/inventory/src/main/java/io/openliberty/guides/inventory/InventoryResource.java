@@ -27,7 +27,6 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
-import org.eclipse.microprofile.metrics.annotation.Counted;
 
 import io.openliberty.guides.inventory.model.InventoryList;
 import io.openliberty.guides.inventory.client.SystemClient;

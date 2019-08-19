@@ -27,7 +27,6 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
-import org.eclipse.microprofile.metrics.annotation.Counted;
 
 import io.openliberty.guides.inventory.model.InventoryList;
 import io.openliberty.guides.inventory.client.SystemClient;
@@ -45,9 +44,7 @@ public class InventoryResource {
   @GET
   @Path("/{hostname}")
   @Produces(MediaType.APPLICATION_JSON)
-  // tag::getPropertiesForHost[]
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws IOException {
-	// end::getPropertiesForHost[] 
 	
 	// Get properties for host
     Properties props = systemClient.getProperties(hostname);
