@@ -46,7 +46,7 @@ public class InventoryResource {
   @Path("/{hostname}")
   @Produces(MediaType.APPLICATION_JSON)
   // tag::fallback[]
-  //@Fallback(fallbackMethod = "getPropertiesFallback")
+  @Fallback(fallbackMethod = "getPropertiesFallback")
   // end::fallback[]
   // tag::mpRetry[]
   @Retry(maxRetries=3, retryOn=IOException.class)
