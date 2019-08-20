@@ -150,7 +150,10 @@ the deployment is complete.
 kubectl get deployments -n istio-system
 ```
  
-Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. On Docker Desktop, you can increase the memory from your {docker} preferences. On {minikube}, you can increase the memory using the `--memory` flag.
+Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. 
+If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. 
+On Docker Desktop, you can increase the memory from your {docker} preferences. On {minikube}, you can increase the memory using the `--memory` flag.
+
 [source, role="no_copy"]
 ----
 NAME                     DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
@@ -541,7 +544,7 @@ include::finish/traffic.yaml[]
 ----
 [role="edit_command_text"]
 Add the [hotspot=istioRetry file=0]`retries` field in the [hotspot file=0]`traffic.yaml` file, to allow Istio to
-retry requests to the `system` service a maximum of 4 times, when the request returns any `5xx` response code. 
+retry requests a maximum of 4 times, when the request returns any `5xx` response code. 
 
 The [hotspot=attempts file=0]`attempts` field is required in the configuration of Istio's Retry policy, and it indicates the
 maximum number of retries that will be attempted for a given request. To retry a request on specific conditions, the
