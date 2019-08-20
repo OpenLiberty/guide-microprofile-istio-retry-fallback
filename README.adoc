@@ -258,7 +258,7 @@ docker images
 
 Your two images `system` and `inventory` should appear in the list of all Docker images:
 
-[role="no_copy"]
+[source, role="no_copy"]
 ----
 REPOSITORY    TAG         
 inventory     1.0-SNAPSHOT
@@ -276,11 +276,11 @@ You will see an output similar to the following:
 
 [role="no_copy"]
 ----
+gateway.networking.istio.io/sys-app-gateway created
 service/system-service created
 service/inventory-service created
 deployment.apps/system-deployment created
 deployment.apps/inventory-deployment created
-gateway.networking.istio.io/sys-app-gateway created
 ----
 
 The `traffic.yaml` file contains two virtual services. A virtual service defines how requests are routed to your applications.
@@ -304,8 +304,8 @@ If all the pods are healthy and running, you will see an output similar to the f
 [source, role="no_copy"]
 ----
 NAME                                    READY     STATUS    RESTARTS   AGE
-inventory-deployment-645767664f-nbtd9   1/1       Running   0          30s
-system-deployment-6bd97d9bf6-4ccds      1/1       Running   0          30s
+inventory-deployment-645767664f-nbtd9   2/2       Running   0          30s
+system-deployment-6bd97d9bf6-4ccds      2/2       Running   0          30s
 ----
 
 Check that all of the deployments are available. You need to wait until all of your deployments are 
@@ -319,8 +319,8 @@ kubectl get deployments
 [source, role="no_copy"]
 ----
 NAME                     READY     UP-TO-DATE   AVAILABLE   AGE
-inventory-deployment     1         1            1           1m
-system-deployment        1         1            1           1m
+inventory-deployment     1/1       1            1           1m
+system-deployment        1/1       1            1           1m
 ----
 
 Pause the `system` service pod to simulate that the service is unavailable. Replace `[system-pod-name]` with the pod name associated with
@@ -330,6 +330,14 @@ your `system` service, which you previously saw when running the `kubectl get po
 ```
 kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause
 ```
+
+You will see the following output:
+
+[source, role="no_copy"]
+----
+Pausing the defaultServer server.
+Pausing the defaultServer server completed.
+----
 
 You will make a request to the `system` service from the `inventory` service to access the 
 JVM system properties of your running container. The Istio [hotspot=gateway file=0]`gateway` is the entry point for HTTP requests to the cluster. 
@@ -361,10 +369,14 @@ You will see the following output:
 [source, role="no_copy"]
 ----
 HTTP/1.1 500 Internal Server Error
-content-length: 18
-content-type: text/plain
+x-powered-by: Servlet/4.0
+content-type: text/html;charset=ISO-8859-1
+$wsep:
+content-language: en-US
 date: Thu, 15 Aug 2019 13:21:57 GMT
+x-envoy-upstream-service-time: 2929
 server: istio-envoy
+transfer-encoding: chunked
 ----
 
 The request returns a `500` response code, as the `system` service is unavailable.
