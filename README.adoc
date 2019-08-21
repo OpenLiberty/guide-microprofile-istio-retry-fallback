@@ -883,13 +883,13 @@ You will see the following output:
 ----
 HTTP/1.1 200 OK
 x-powered-by: Servlet/4.0
+x-from-fallback: yes
 content-type: application/json
 date: Mon, 19 Aug 2019 19:49:47 GMT
 content-language: en-US
 x-envoy-upstream-service-time: 4242
 server: istio-envoy
 transfer-encoding: chunked
-BY FALLBACK
 ----
 
 You can see that the request is now successful and returns a `200` response code, since the fallback method is called 
@@ -920,13 +920,13 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-15
+3
 ----
 
-The above command returns 15, indicating that a total of 15 requests are made to the `system` service.
-You enabled Istio to retry a maximum of 5 times, which is multiplied by the 3 default requests by Istio,
-and hence the total number of requests to the `system` service is 15.
-However, since all of these requests failed, the fallback method [hotspot=fallbackMethod file=0]`getPropertiesFallback()` is called. 
+The above command returns 3, indicating that a total of 3 requests are made to the `system` service.
+The 4 Istio retries that you enabled on the `inventory` service are not performed, since the Fallback policy is enabled. 
+However, the 3 default requests by Istio on the server end are still performed. 
+Since all of these requests failed, the fallback method [hotspot=fallbackMethod file=1]`getPropertiesFallback()` is called. 
 
 // =================================================================================================
 // Testing the microservices
