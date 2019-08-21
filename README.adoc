@@ -219,9 +219,9 @@ include::finish/inventory/src/main/liberty/config/server.xml[]
 ----
 
 SystemClient.java
-[source, Java, linenums, role='code_column']
+[source, Java, linenums, role='code_column hide_tags=copyright hide_tags=doc']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[tags=**;!copyright;]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[]
 ----
 
 === Adding the MicroProfile @Retry annotation
@@ -236,7 +236,7 @@ The integer value must be greater than or equal to -1. A value of -1 indicates t
 
 To retry the requests to your `system` service after an `IOException` has occurred, add the `@Retry` annotation.
 
-[role="code_command hotspot=mpRetry hotspot=getPropertiesForHost", subs="quotes"]
+[role="code_command hotspot", subs="quotes"]
 ----
 #Update the `InventoryResource.java` file.#
 `inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java`
@@ -246,9 +246,9 @@ Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPrope
 to retry the service request a maximum of 3 times, only when an `IOException` occurs.
 
 InventoryResource.java
-[source, Java, linenums, role='code_column']
+[source, Java, linenums, role='code_column hide_tags=copyright']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright;]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
 ----
 
 === Building and running the application
@@ -818,9 +818,9 @@ Add the [hotspot=fallback file=1]`@Fallback` annotation before the [hotspot=getP
 to call the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method when a failure occurs.
 
 InventoryResource.java
-[source, Java, linenums, role='code_column']
+[source, Java, linenums, role='code_column hide_tags=copyright']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright;]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
 ----
 
 The [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method, which is the designated fallback method for the original 
