@@ -54,11 +54,11 @@ public class InventoryResource {
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) throws IOException {
 	// end::getPropertiesForHost[] 
 	
-	// Get properties for host
+	  // Get properties for host
     Properties props = systemClient.getProperties(hostname);
     if (props == null) {
       return Response.status(Response.Status.NOT_FOUND)
-                     .entity("ERROR: Unknown hostname or the system service may not be " 
+                     .entity("ERROR: Unknown hostname or the system service may not be "
                              + "running on " + hostname)
                      .build();
     }

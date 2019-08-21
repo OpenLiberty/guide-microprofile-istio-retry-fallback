@@ -72,7 +72,7 @@ the Retry policy provides another chance for the request to succeed.
 Simply retrying the request might be all you need to do to make it succeed.
 
 Fallback offers an alternative result when an execution does not complete successfully.
-You will use the `@Fallback` annotations from the MicroProfile Fault Tolerance specification to define criteria 
+You will use the `@Fallback` annotation from the MicroProfile Fault Tolerance specification to define criteria 
 for when to provide an alternative solution for a failed execution.
 
 You will create a microservice ecosystem demonstrating MicroProfile Fault Tolerance with Istio fault handling.
@@ -424,15 +424,11 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-3
+1
 ----
 
-The above command returns 3, meaning that a total of 3 requests are made to the `system` service. 
-Altough the `system` service is available and your single request to the service is successful with a `200` response code, 
-the above command returns 3, instead of 1.
-This is because Istio by default will retry 2 times to resolve any issues with a `503` response code. 
-So, there were a total of 3 requests made to the `system` service, 
-including the initial request and the 2 retries that were made after the initial request.
+The above command returns 1, meaning that 1 request is made to the `system` service. 
+Your single request to the service is successful with a `200` response code.
 
 Now you will make the `system` service unavailable and MicroProfile's Retry policy will be performed.
 
@@ -516,15 +512,17 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-12
+13
 ----
 
-The above command returns 12, since there were a total of 12 requests made to the `system` service.
-However, you enabled MicroProfile to retry a maximum of 3 times, and hence the total number of requests to the `system` service should be 4.
-This is not the case because the number of retries set by MicroProfile is multiplied by Istio's default number of retries.
+The above command returns 13, since there were a total of 13 requests made to the `system` service.
+However, you enabled MicroProfile to retry a maximum of 3 times, and hence the total number of requests to the `system` service, 
+including the initial request, should be 4. 
+This is not the case because Istio by default will retry 2 times to resolve any issues with a `503` response code. 
+Istio's default number of retries are then multiplied by the number of retries set by MicroProfile.
 
-Individually, MicroProfile would have sent a total of 4 requests, including the initial request and 3 retries. Without MicroProfile,
-Istio would have sent a total of 3 requests, including the initial request and the 2 default retries. 
+Without MicroProfile, Istio would have sent a total of 3 requests, including the initial request and the 2 default retries. 
+Individually, MicroProfile would have sent a total of 4 requests, including the initial request and 3 retries. 
 The 3 default requests by Istio are multiplied by the 4 requests by MicroProfile, causing a total of 12 requests.
 
 // =================================================================================================
@@ -568,7 +566,7 @@ kubectl replace --force -f traffic.yaml
 ```
 
 Pause the `system` service pod to simulate that the service is unavailable. Replace `[system-pod-name]` with the pod name associated with
-your `system` service.
+your `system` service, which you can see by running the `kubectl get pods` command.
 
 [role=command]
 ```
@@ -690,8 +688,9 @@ used by the pod's containers. The environment variables are defined in the pod's
 `istio.yaml`
 ----
 [role="edit_command_text"]
-To inject the [hotspot=configMap file=0]`ConfigMap` with the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` property into your pods, 
-add the [hotspot=invConfig file=1]`envFrom` field in the [hotspot file=1]`istio.yaml` file. 
+Add the [hotspot=invConfig file=1]`envFrom` field in the [hotspot file=1]`istio.yaml` file, 
+to inject the [hotspot=configMap file=0]`ConfigMap` with the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` property into your pods, 
+
 
 istio.yaml
 [source, yaml, linenums, role='code_column']
@@ -718,7 +717,7 @@ kubectl apply -f config.yaml
 ```
 
 Pause the `system` service pod to simulate that the service is unavailable. Replace `[system-pod-name]` with the pod name associated with
-your `system` service.
+your `system` service, which you can see by running the `kubectl get pods` command.
 
 [role=command]
 ```
@@ -780,10 +779,22 @@ The above command returns 15, indicating that a total of 15 requests are made to
 Since MicroProfile's Retry policy is disabled, only Istio's retries are performed.
 
 Istio by default would have sent a total of 3 requests, and Istio would have sent 5 requests because of the retries 
-that you enabled in the [hotspot]`traffic.yaml` file. 
+that you enabled in the [hotspot file=2]`traffic.yaml` file. 
 The 3 default requests by Istio are multiplied by the 5 new requests by Istio, causing a total of 15 requests.
 
+traffic.yaml
+[source, yaml, linenums, role='code_column']
+----
+include::finish/traffic.yaml[]
+----
+
 === Adding the MicroProfile @Fallback annotation
+
+config.yaml
+[source, yaml, linenums, indent=0, role="code_column"]
+----
+include::finish/config.yaml[]
+----
 
 Since retrying the requests to your `system` service is still not successful, you need a plan to "fall back" on when the requests fail. 
 You will create a fallback method to deal with the failed requests to your `system` service.
@@ -802,9 +813,9 @@ If your microservices have a Retry policy specified, then the fallback occurs af
 `inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java`
 ----
 [role="edit_command_text"]
-Create the [hotspot=fallbackMethod file=0]`getPropertiesFallback()` method. 
-Add the [hotspot=fallback file=0]`@Fallback` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
-to call the [hotspot=fallbackMethod file=0]`getPropertiesFallback()` method when a failure occurs.
+Create the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method. 
+Add the [hotspot=fallback file=1]`@Fallback` annotation before the [hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method, 
+to call the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method when a failure occurs.
 
 InventoryResource.java
 [source, Java, linenums, role='code_column']
@@ -812,10 +823,16 @@ InventoryResource.java
 include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright;]
 ----
 
-The [hotspot=fallbackMethod file=0]`getPropertiesFallback()` method, which is the designated fallback method for the original 
-[hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, prints out a warning message in the browser saying that 
+The [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method, which is the designated fallback method for the original 
+[hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method, prints out a warning message in the browser saying that 
 the `system` service may not be running.
 
+Rebuild your application and integrate the Fallback policy into your microservices:
+
+[role=command]
+```
+mvn package
+```
 
 Deploy your microservices again, and wait until all of your deployments are ready and available:
 
@@ -833,7 +850,7 @@ kubectl apply -f config.yaml
 ```
 
 Pause the `system` service pod to simulate that the service is unavailable. Replace `[system-pod-name]` with the pod name associated with
-your `system` service.
+your `system` service, which you can see by running the `kubectl get pods` command.
 
 [role=command]
 ```
