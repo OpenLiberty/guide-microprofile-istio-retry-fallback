@@ -420,6 +420,8 @@ kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
 ****
 
+You will see the following output:
+
 [source, role="no_copy"]
 ----
 3
@@ -509,6 +511,8 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
 ****
+
+You will see the following output:
 
 [source, role="no_copy"]
 ----
@@ -614,6 +618,8 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
 ****
+
+You will see the following output:
 
 [source, role="no_copy"]
 ----
@@ -763,6 +769,8 @@ kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
 ****
 
+You will see the following output:
+
 [source, role="no_copy"]
 ----
 15
@@ -852,6 +860,8 @@ curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/
 ```
 ****
 
+You will see the following output:
+
 [source, role="no_copy"]
 ----
 HTTP/1.1 200 OK
@@ -865,7 +875,7 @@ transfer-encoding: chunked
 BY FALLBACK
 ----
 
-You will see that the request is now successful and returns a `200` response code, since the fallback method is called 
+You can see that the request is now successful and returns a `200` response code, since the fallback method is called 
 when the `system` service is not available.
 
 To see the number of times that the service is retried before the fallback method is called, check the logs of the `system` pod using the `kubectl logs` command.
@@ -888,6 +898,8 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
 ****
+
+You will see the following output:
 
 [source, role="no_copy"]
 ----
