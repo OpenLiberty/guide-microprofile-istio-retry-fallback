@@ -884,7 +884,7 @@ You will see the following output:
 ----
 HTTP/1.1 200 OK
 x-powered-by: Servlet/4.0
-x-from-fallback: yes
+x-from-fallback: true
 content-type: application/json
 date: Mon, 19 Aug 2019 19:49:47 GMT
 content-language: en-US
@@ -928,49 +928,6 @@ The above command returns 3, indicating that a total of 3 requests are made to t
 The 4 Istio retries that you enabled on the `inventory` service are not performed, since the Fallback policy is enabled. 
 However, the 3 default requests by Istio on the server end are still performed. 
 Since all of these requests failed, the fallback method [hotspot=fallbackMethod file=1]`getPropertiesFallback()` is called. 
-
-// =================================================================================================
-// Testing the microservices
-// =================================================================================================
-
-== Testing the microservices
-
-Run the command to start the tests:
-
-****
-[system]#*{win} | {mac}*#
-
-[role=command]
-```
-mvn verify -Ddockerfile.skip=true
-```
-
-[system]#*{linux}*#
-
-[role=command]
-```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip` -Dport=31380
-```
-
-The `cluster.ip` and `port` parameters refer to the IP address and port for the {istio} gateway.
-****
-
-The `dockerfile.skip=true` flag skips rebuilding the {docker} images.
-
-If the tests pass, then you should see output similar to the following example:
-
-[source, role="no_copy"]
-----
--------------------------------------------------------
- T E S T S
--------------------------------------------------------
-Running it.io.openliberty.guides.system.SystemEndpointTest
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.503 s - in it.io.openliberty.guides.system.SystemEndpointTest
-
-Results:
-
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
-----
 
 
 // =================================================================================================
