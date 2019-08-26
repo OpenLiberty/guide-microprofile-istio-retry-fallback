@@ -81,3 +81,6 @@ spec:
         image: inventory:1.0-SNAPSHOT
         ports:
         - containerPort: 9081
+        envFrom:
+        - configMapRef:
+            name: inventory-config
