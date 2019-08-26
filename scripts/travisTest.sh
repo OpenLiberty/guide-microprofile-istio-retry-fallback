@@ -7,20 +7,56 @@ set -euxo pipefail
 ##
 ##############################################################################
 
+ISTIO_LATEST=`curl -L -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.tag_name'`
+
+curl -L https://github.com/istio/istio/releases/download/$ISTIO_LATEST/istio-$ISTIO_LATEST-linux.tar.gz | tar xzvf -
+
+cd istio-$ISTIO_LATEST
+
+for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
+
+kubectl apply -f install/kubernetes/istio-demo.yaml
+kubectl get deployments -n istio-system
+kubectl label namespace default istio-injection=enabled
+
+cd ..
+
 mvn -q package
 
-kubectl apply -f kubernetes.yaml
+docker pull open-liberty
 
-sleep 120
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+
+sleep 10
+
+kubectl apply -f services.yaml
+kubectl apply -f traffic.yaml
+kubectl apply -f config.yaml
+
+sleep 50
 
 kubectl get pods
 
-echo `minikube ip`
+SYSTEM=`kubectl get pods | grep system | sed 's/ .*//'`
 
-curl http://`minikube ip`:31000/system/properties
-curl http://`minikube ip`:32000/inventory/systems
+kubectl exec -it $SYSTEM /opt/ol/wlp/bin/server pause
 
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
+sleep 20
 
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
+COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
+
+echo $COUNT
+
+curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
+
+sleep 20
+
+COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
+
+echo $COUNT
+
+if [ $COUNT -ne 3 ]
+    then
+        exit 1
+fi
