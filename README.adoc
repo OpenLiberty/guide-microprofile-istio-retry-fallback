@@ -790,7 +790,7 @@ to add fallback to your microservices.
 The `@Fallback` annotation dictates a method to call when the original method encounters a failed execution. 
 If your microservices have a Retry policy specified, then the fallback occurs after all of the retries have failed. 
 
-[role="code_command", subs="quotes"]
+[role="code_command hotspot", subs="quotes"]
 ----
 #Update the `InventoryResource.java` file.#
 `inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java`
