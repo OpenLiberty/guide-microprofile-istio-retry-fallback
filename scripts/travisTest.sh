@@ -7,6 +7,8 @@ set -euxo pipefail
 ##
 ##############################################################################
 
+kubectl get nodes
+
 ISTIO_LATEST=`curl -L -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.tag_name'`
 
 curl -L https://github.com/istio/istio/releases/download/$ISTIO_LATEST/istio-$ISTIO_LATEST-linux.tar.gz | tar xzvf -
@@ -48,7 +50,9 @@ COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
 
 echo $COUNT
 
-curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
+echo `minikube ip`
+
+curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
 
 sleep 20
 
