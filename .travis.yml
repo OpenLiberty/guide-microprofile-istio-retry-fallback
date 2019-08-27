@@ -14,9 +14,9 @@ before_script:
 - wget https://github.com/kubernetes/minikube/releases/download/v0.28.2/minikube-linux-amd64 -q -O minikube
 - chmod +x minikube
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
-- sudo minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.13.0
+- minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.13.0 --bootstrapper=localkube
 - sudo apt-get install jq
-- eval $(minikube docker-env)
+- sudo eval $(minikube docker-env)
 - chmod +x ../scripts/travisTest.sh
 script: ../scripts/travisTest.sh
 branches:
