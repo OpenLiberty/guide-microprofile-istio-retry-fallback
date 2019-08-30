@@ -90,3 +90,16 @@ spec:
             name: inventory-config
             # end::configName2[]
         # end::invConfig[]
+---
+apiVersion: v1
+# tag::configMap[]
+kind: ConfigMap
+# end::configMap[]
+metadata:
+  # tag::configName[]
+  name: inventory-config
+  # end::configName[]
+data:
+  # tag::nonFallback[]
+  MP_Fault_Tolerance_NonFallback_Enabled: "false"
+  # end::nonFallback[]
