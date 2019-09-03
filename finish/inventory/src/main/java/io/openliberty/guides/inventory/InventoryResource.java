@@ -23,6 +23,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.ProcessingException;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -52,11 +53,11 @@ public class InventoryResource {
   @Fallback(fallbackMethod = "getPropertiesFallback")
   // end::fallback[]
   // tag::mpRetry[]
-  @Retry(maxRetries=3, retryOn=ProcessingException.class)
+  @Retry(maxRetries=3, retryOn=WebApplicationException.class)
   // end::mpRetry[]
   // tag::getPropertiesForHost[]
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) 
-         throws ProcessingException, UnknownUrlException {
+         throws WebApplicationException, ProcessingException, UnknownUrlException {
   // end::getPropertiesForHost[] 
     
     String customURLString = "http://" + hostname + ":" + SYS_HTTP_PORT + "/system";

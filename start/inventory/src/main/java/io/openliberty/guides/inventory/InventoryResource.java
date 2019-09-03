@@ -1,15 +1,3 @@
-// tag::copyright[]
-/*******************************************************************************
- * Copyright (c) 2019 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - Initial implementation
- *******************************************************************************/
-// end::copyright[]
 package io.openliberty.guides.inventory;
 
 import java.net.MalformedURLException;
@@ -23,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.ProcessingException;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -49,7 +38,7 @@ public class InventoryResource {
   @Path("/{hostname}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getPropertiesForHost(@PathParam("hostname") String hostname) 
-         throws ProcessingException, UnknownUrlException {
+         throws WebApplicationException, ProcessingException, UnknownUrlException {
     
     String customURLString = "http://" + hostname + ":" + SYS_HTTP_PORT + "/system";
     URL customURL = null;

@@ -223,10 +223,10 @@ include::finish/inventory/src/main/java/io/openliberty/guides/inventory/Inventor
 === Adding the MicroProfile @Retry annotation
 
 To simulate that your `system` service is temporarily down, due to brief intermittent issues, you will pause the pod that is associated
-with your `system` service, and try to send requests to the service. When the `system` pod is paused, requests to the service return a `500` status code, 
-and the [hotspot=getProperties file=0]`systemClient.getProperties()` in [hotspot file=0]`InventoryResource.java` throws a `ProcessingException`. 
+with your `system` service, and try to send requests to the service. When the `system` pod is paused, requests to the service return a `503` status code, 
+and the [hotspot=getProperties file=0]`systemClient.getProperties()` in [hotspot file=0]`InventoryResource.java` throws a `WebApplicationException`. 
 
-To retry the requests to your `system` service after an `ProcessingException` has occurred, add the `@Retry` annotation.
+To retry the requests to your `system` service after an `WebApplicationException` has occurred, add the `@Retry` annotation.
 
 [role="code_command hotspot", subs="quotes"]
 ----
@@ -235,7 +235,7 @@ To retry the requests to your `system` service after an `ProcessingException` ha
 ----
 [role="edit_command_text"]
 Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
-to retry the service request a maximum of 3 times, only when an [hotspot=exception file=1]`ProcessingException` occurs.
+to retry the service request a maximum of 3 times, only when an [hotspot=exception file=1]`WebApplicationException` occurs.
 
 InventoryResource.java
 [source, Java, linenums, role='code_column hide_tags=copyright']
@@ -481,18 +481,17 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-HTTP/1.1 500 Internal Server Error
+HTTP/1.1 503 Internal Server Error
 x-powered-by: Servlet/4.0
-content-type: text/html;charset=ISO-8859-1
-$wsep:
-content-language: en-US
+content-length: 91
+content-type: text/plain
 date: Thu, 15 Aug 2019 13:21:57 GMT
-x-envoy-upstream-service-time: 2929
 server: istio-envoy
-transfer-encoding: chunked
+x-envoy-upstream-service-time: 2929
+content-language: en-US
 ----
 
-The request returns a `500` response code, as the `system` service is unavailable.
+The request returns a `503` response code, as the `system` service is unavailable.
 However, the request was retried several times with MicroProfile `@Retry` before failing.
 
 See the number of times that the service was retried:
@@ -519,10 +518,10 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-13
+37
 ----
 
-The above command returns 13, since there were a total of 13 requests made to the `system` service.
+The above command returns 37, since there were a total of 37 requests made to the `system` service.
 These requests include Istio's default number of retries and the retries set by MicroProfile.
 
 // =================================================================================================
@@ -551,7 +550,7 @@ retry requests a maximum of 4 times, when the request returns any `5xx` response
 The [hotspot=attempts file=0]`attempts` field is required in the configuration of the 
 https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service/#HTTPRetry[Istio Retry^] policy, and it indicates the
 maximum number of retries that will be attempted for a given request. To retry a request on specific conditions, the
-[hotspot=retryOn file=0]`retryOn` field is used. Since your paused `system` service responds with a `500` response code, 
+[hotspot=retryOn file=0]`retryOn` field is used. Since your paused `system` service responds with a `503` response code, 
 you set [hotspot=retryOn file=0]`retryOn` to be `5xx`. 
 Other https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on[retry conditions^] 
 can also be specified in [hotspot=retryOn file=0]`retryOn`. An optional field that can be provided to Istio's Retry policy
@@ -595,7 +594,7 @@ curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/
 ```
 ****
 
-You will see that the request still returns a `500` response code, as the `system` service is unavailable.
+You will see that the request still returns a `503` response code, as the `system` service is unavailable.
 This time however, the request was retried several times with Istio before failing.
 
 See the number of times that the service was retried:
@@ -714,7 +713,7 @@ curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/
 ```
 ****
 
-You will see that the request still returns a `500` response code, as the `system` service is unavailable.
+You will see that the request still returns a `503` response code, as the `system` service is unavailable.
 This time however, the request was retried several times with Istio, without any retries from MicroProfile.
 
 See the number of times that the service was retried:
@@ -803,6 +802,14 @@ Rebuild your application and integrate the Fallback policy into your microservic
 mvn package
 ```
 
+Next, run the `docker build` commands to rebuild the container images for your application:
+
+[role='command']
+```
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+```
+
 Deploy your microservices again to turn off all MicroProfile capabilities, except fallback:
 
 [role=command]
@@ -847,7 +854,7 @@ You will see the following output:
 ----
 HTTP/1.1 200 OK
 x-powered-by: Servlet/4.0
-x-from-fallback: true
+x-from-fallback: yes
 content-type: application/json
 date: Mon, 19 Aug 2019 19:49:47 GMT
 content-language: en-US
