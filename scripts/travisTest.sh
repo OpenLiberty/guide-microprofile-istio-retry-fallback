@@ -22,6 +22,9 @@ kubectl apply -f install/kubernetes/istio-demo.yaml
 sleep 20
 
 kubectl get deployments -n istio-system
+
+sleep 30
+
 kubectl label namespace default istio-injection=enabled
 
 cd ..
@@ -37,13 +40,16 @@ sleep 10
 
 kubectl apply -f services.yaml
 kubectl apply -f traffic.yaml
-kubectl apply -f config.yaml
 
 sleep 50
 
 kubectl get pods
 
+kubectl get deployments
+
 SYSTEM=`kubectl get pods | grep system | sed 's/ .*//'`
+
+kubectl describe pod $SYSTEM
 
 kubectl exec -it $SYSTEM /opt/ol/wlp/bin/server pause
 
