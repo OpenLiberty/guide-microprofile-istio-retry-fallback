@@ -19,11 +19,9 @@ for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f 
 
 kubectl apply -f install/kubernetes/istio-demo.yaml
 
-sleep 20
+sleep 120
 
 kubectl get deployments -n istio-system
-
-sleep 30
 
 kubectl label namespace default istio-injection=enabled
 
@@ -55,7 +53,7 @@ kubectl exec -it $SYSTEM /opt/ol/wlp/bin/server pause
 
 sleep 20
 
-COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
+kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080
 
 echo `minikube ip`
 
