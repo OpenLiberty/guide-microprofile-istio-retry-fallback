@@ -53,8 +53,6 @@ kubectl exec -it $SYSTEM /opt/ol/wlp/bin/server pause
 
 sleep 20
 
-kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080
-
 echo `minikube ip`
 
 curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
