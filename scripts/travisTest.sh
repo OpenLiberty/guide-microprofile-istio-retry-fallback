@@ -19,7 +19,7 @@ for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f 
 
 kubectl apply -f install/kubernetes/istio-demo.yaml
 
-sleep 120
+sleep 240
 
 kubectl get deployments -n istio-system
 
