@@ -151,10 +151,6 @@ kubectl get deployments -n istio-system
 
 All the values in the `AVAILABLE` column will have a value of `1` after
 the deployment is complete.
- 
-Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. 
-If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. 
-On Docker Desktop, you can increase the memory from your {docker} preferences. On {minikube}, you can increase the memory using the `--memory` flag.
 
 [source, role="no_copy"]
 ----
@@ -172,6 +168,10 @@ istio-tracing            1/1     1            1           2m48s
 kiali                    1/1     1            1           2m48s
 prometheus               1/1     1            1           2m48s
 ----
+ 
+Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. 
+If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. 
+On Docker Desktop, you can increase the memory from your {docker} preferences. On {minikube}, you can increase the memory using the `--memory` flag.
 
 Finally, create the `istio-injection` label and set its value to `enabled`.
 
