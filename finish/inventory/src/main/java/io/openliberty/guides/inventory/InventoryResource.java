@@ -56,8 +56,10 @@ public class InventoryResource {
   @Retry(maxRetries=3, retryOn=WebApplicationException.class)
   // end::mpRetry[]
   // tag::getPropertiesForHost[]
-  public Response getPropertiesForHost(@PathParam("hostname") String hostname) 
-         throws WebApplicationException, ProcessingException, UnknownUrlException {
+  public Response getPropertiesForHost(@PathParam("hostname") String hostname)
+        // tag::webApplicationException[]
+        throws WebApplicationException, ProcessingException, UnknownUrlException {
+        // end::webApplicationException[]
   // end::getPropertiesForHost[] 
     
     String customURLString = "http://" + hostname + ":" + SYS_HTTP_PORT + "/system";

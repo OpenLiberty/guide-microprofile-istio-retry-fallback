@@ -236,7 +236,7 @@ To retry the requests to your `system` service after an `WebApplicationException
 ----
 [role="edit_command_text"]
 Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
-to retry the service request a maximum of 3 times, only when an [hotspot=exception file=1]`WebApplicationException` occurs.
+to retry the service request a maximum of 3 times, only when an [hotspot=webApplicationException file=0]`WebApplicationException` occurs.
 
 InventoryResource.java
 [source, Java, linenums, role='code_column hide_tags=copyright hide_tags=fallback hide_tags=fallbackMethod']
@@ -244,11 +244,6 @@ InventoryResource.java
 include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
 ----
 
-SystemClient.java
-[source, Java, linenums, role='code_column hide_tags=copyright']
-----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/client/SystemClient.java[]
-----
 
 A request to a service might fail for many different reasons. The default Retry policy initiates a retry for every `java.lang.Exception`. 
 However, you can base a Retry policy on a specific exception by using the `retryOn` parameter. You can identify more than one exception 
