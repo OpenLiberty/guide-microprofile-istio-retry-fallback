@@ -14,7 +14,7 @@
 :page-duration: 30 minutes
 :page-releasedate: 2019-09-10
 :page-description: Explore how to use MicroProfile and Istio Fault Tolerance
-:page-tags: ['Kubernetes']
+:page-tags: ['MicroProfile', 'Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
 :common-includes: ../guides-common/
@@ -135,20 +135,22 @@ FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl apply -
 ****
 
 Next, deploy {istio} resources to your cluster by running the `kubectl apply` command, which creates or updates
-{kube} resources defined in a yaml file. This command deploys {istio}.
+{kube} resources defined in a yaml file.
 
 [role=command]
 ```
 kubectl apply -f install/kubernetes/istio-demo.yaml
 ```
 
-Verify that {istio} was successfully deployed. All the values in the `AVAILABLE` column will have a value of `1` after
-the deployment is complete.
+Verify that Istio was successfully deployed by running the following command:
 
 [role=command]
 ```
 kubectl get deployments -n istio-system
 ```
+
+All the values in the `AVAILABLE` column will have a value of `1` after
+the deployment is complete.
  
 Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. 
 If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. 
@@ -156,19 +158,19 @@ On Docker Desktop, you can increase the memory from your {docker} preferences. O
 
 [source, role="no_copy"]
 ----
-NAME                     DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-grafana                  1         1         1            1           44s
-istio-citadel            1         1         1            1           44s
-istio-egressgateway      1         1         1            1           44s
-istio-galley             1         1         1            1           44s
-istio-ingressgateway     1         1         1            1           44s
-istio-pilot              1         1         1            1           44s
-istio-policy             1         1         1            1           44s
-istio-sidecar-injector   1         1         1            1           44s
-istio-telemetry          1         1         1            1           44s
-istio-tracing            1         1         1            1           43s
-prometheus               1         1         1            1           44s
-servicegraph             1         1         1            1           44s
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+grafana                  1/1     1            1           2m48s
+istio-citadel            1/1     1            1           2m48s
+istio-egressgateway      1/1     1            1           2m48s
+istio-galley             1/1     1            1           2m48s
+istio-ingressgateway     1/1     1            1           2m48s
+istio-pilot              1/1     1            1           2m48s
+istio-policy             1/1     1            1           2m48s
+istio-sidecar-injector   1/1     1            1           2m48s
+istio-telemetry          1/1     1            1           2m48s
+istio-tracing            1/1     1            1           2m48s
+kiali                    1/1     1            1           2m48s
+prometheus               1/1     1            1           2m48s
 ----
 
 Finally, create the `istio-injection` label and set its value to `enabled`.
@@ -179,8 +181,7 @@ kubectl label namespace default istio-injection=enabled
 ```
 
 Adding this label enables automatic {istio} sidecar injection. Automatic injection means that sidecars will
-automatically be injected into your pods when you deploy your application. You don't need to perform
-any additional steps for the sidecars to be injected.
+automatically be injected into your pods when you deploy your application.
 
 // =================================================================================================
 // Enabling MicroProfile Fault Tolerance
@@ -215,7 +216,7 @@ include::finish/inventory/src/main/liberty/config/server.xml[]
 ----
 
 InventoryResource.java
-[source, Java, linenums, role='code_column hide_tags=copyright']
+[source, Java, linenums, role='code_column hide_tags=copyright hide_tags=mpRetry hide_tags=fallback hide_tags=fallbackMethod']
 ----
 include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
 ----
@@ -238,7 +239,7 @@ Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPrope
 to retry the service request a maximum of 3 times, only when an [hotspot=exception file=1]`WebApplicationException` occurs.
 
 InventoryResource.java
-[source, Java, linenums, role='code_column hide_tags=copyright']
+[source, Java, linenums, role='code_column hide_tags=copyright hide_tags=fallback hide_tags=fallbackMethod']
 ----
 include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
 ----
@@ -425,15 +426,12 @@ kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
 ****
 
-You will see the following output:
+You will see that the above command returns 1, meaning that 1 request is made to the `system` service:
 
 [source, role="no_copy"]
 ----
 1
 ----
-
-The above command returns 1, meaning that 1 request is made to the `system` service. 
-Your single request to the service is successful with a `200` response code.
 
 Now you will make the `system` service unavailable and MicroProfile's Retry policy will be performed.
 
@@ -481,7 +479,7 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-HTTP/1.1 503 Internal Server Error
+HTTP/1.1 503 Service Unavailable
 x-powered-by: Servlet/4.0
 content-length: 91
 content-type: text/plain
@@ -522,16 +520,19 @@ You will see the following output:
 ----
 
 The above command returns 37, since there were a total of 37 requests made to the `system` service.
-These requests include Istio's default number of retries and the retries set by MicroProfile.
+By default, Istio will retry 2 times to resolve any issues with a `503` response code.
+Including the initial requests and the retries, the requests made by Istio are multiplied by the requests made by MicroProfile.
+Hence, the 3 requests from `system` service and the 3 requests from the `inventory` service are multiplied by the 4 MicroProfile requests.
+
 
 // =================================================================================================
-// Enabling Istio fault tolerance
+// Enabling Istio Fault Tolerance
 // =================================================================================================
 
-== Enabling Istio fault tolerance
+== Enabling Istio Fault Tolerance
 
 You previously implemented the Retry policy to retry requests to your `system` service using MicroProfile Fault Tolerance.
-This Retry policy can also be implemented with Istio fault tolerance.
+This Retry policy can also be implemented with Istio Fault Tolerance.
 
 [role="code_command hotspot", subs="quotes"]
 ----
@@ -544,8 +545,8 @@ traffic.yaml
 include::finish/traffic.yaml[]
 ----
 [role="edit_command_text"]
-Add the [hotspot=istioRetry file=0]`retries` field in the [hotspot file=0]`traffic.yaml` file, to allow Istio to
-retry requests a maximum of 4 times, when the request returns any `5xx` response code. 
+Add the [hotspot=istioRetry file=0]`retries` field under the [hotspot=route file=0]`route` specification in the [hotspot file=0]`traffic.yaml` file, 
+to allow Istio to retry requests a maximum of 4 times, when the request returns any `5xx` response code. 
 
 The [hotspot=attempts file=0]`attempts` field is required in the configuration of the 
 https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service/#HTTPRetry[Istio Retry^] policy, and it indicates the
@@ -625,11 +626,10 @@ You will see the following output:
 ----
 
 The above command returns 60, indicating that a total of 60 requests are made to the `system` service.
-These requests include Istio's default number of retries, the retries 
-that you enabled in the [hotspot file=0]`traffic.yaml` file, and the retries set by MicroProfile.
+The 3 default Istio requests for the `system` service and the 5 requests for the `inventory` service
+that you enabled in the [hotspot file=0]`traffic.yaml` file, are multiplied by the 4 requests sent by MicroProfile.
 
-You will disable some of MicroProfile's capabilities, including Retry, 
-to have your `system` service retry with only Istio's Retry policy. 
+Later, you will disable some of MicroProfile's capabilities, to have your `system` service retry with only Istio's Retry policy. 
 
 
 // =================================================================================================
@@ -669,7 +669,8 @@ services.yaml
 include::finish/services.yaml[]
 ----
 [role="edit_command_text"]
-Set the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property to false in a [hotspot=configMap file=0]`ConfigMap`. 
+Add a [hotspot=configMap file=0]`ConfigMap` into the [hotspot file=0]`services.yaml` file, and 
+set the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property to false. 
 Add the [hotspot=invConfig file=0]`envFrom` field 
 to inject the [hotspot=configMap file=0]`ConfigMap` with the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` property into your pods. 
 
@@ -908,7 +909,7 @@ Since all of these requests failed, the fallback method [hotspot=fallbackMethod 
 When you are done checking out the MicroProfile and Istio Fault Tolerance features, 
 you might want to teardown all the deployed resources as a cleanup step.
 
-Delete your resources from the cluster.
+Delete your resources from the cluster:
 
 [role=command]
 ```
@@ -924,12 +925,14 @@ after the label name indicates that the label should be deleted.
 kubectl label namespace default istio-injection-
 ```
 
-Navigate to the directory where you extracted {istio} and delete the {istio} resources from the cluster.
+Navigate to the directory where you extracted {istio} and delete the {istio} resources from the cluster:
 
 [role=command]
 ```
 kubectl delete -f install/kubernetes/istio-demo.yaml
 ```
+
+Next, delete the Istio custom resource definitions, by running the following command:
 
 ****
 [system]#*{mac}*#

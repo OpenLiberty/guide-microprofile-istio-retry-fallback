@@ -24,6 +24,7 @@ spec:
   gateways:
   - sys-app-gateway
   http:
+  # tag::route[]
   - route:
     - destination:
         port:
@@ -38,3 +39,4 @@ spec:
       retryOn: 5xx
       # end::retryOn[]
     # end::istioRetry[]
+  # end::route[]
