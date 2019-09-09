@@ -684,7 +684,6 @@ kubectl replace --force -f services.yaml
 ```
 
 Wait until all of your deployments are ready and available.
-The `[system-pod-name]` will be regenerated and is different than the previous one you have been using.
 Run the `kubectl get pods` command to get the new `[system-pod-name]`.
 Pause the `system` service pod to simulate that the service is unavailable:
 
@@ -820,7 +819,6 @@ kubectl replace --force -f traffic.yaml
 ```
 
 Wait until all of your deployments are ready and available.
-The `[system-pod-name]` will be regenerated and is different than the previous one you have been using.
 Run the `kubectl get pods` command to get the new `[system-pod-name]`.
 Pause the `system` service pod to simulate that the service is unavailable:
 
