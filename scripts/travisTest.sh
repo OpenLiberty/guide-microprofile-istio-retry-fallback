@@ -11,6 +11,11 @@ kubectl get nodes
 
 ISTIO_LATEST=`curl -L -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.tag_name'`
 
+if [ -z $ISTIO_LATEST ]
+    then
+        ISTIO_LATEST=1.2.5
+fi
+
 curl -L https://github.com/istio/istio/releases/download/$ISTIO_LATEST/istio-$ISTIO_LATEST-linux.tar.gz | tar xzvf -
 
 cd istio-$ISTIO_LATEST
