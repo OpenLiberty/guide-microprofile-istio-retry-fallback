@@ -12,15 +12,15 @@
 :projectid: microprofile-istio-retry
 :page-layout: guide-multipane
 :page-duration: 30 minutes
-:page-releasedate: 2019-09-10
-:page-description: Explore how to use MicroProfile and Istio Fault Tolerance
+:page-releasedate: 2019-09-13
+:page-description: Explore how to use MicroProfile Fault Tolerance together with Istio Fault Tolerance
 :page-tags: ['MicroProfile', 'Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
 :common-includes: ../guides-common/
 :source-highlighter: prettify
-:page-seo-title: Retry and Fallback with MicroProfile and Istio Fault Tolerance
-:page-seo-description: How to retry services and add fallback behaviour with MicroProfile and Istio Fault Tolerance
+:page-seo-title: Building resilient microservices using MicroProfile and Istio Fault Tolerance
+:page-seo-description: A tutorial on MicroProfile Fault Tolerance integrates with Istio Fault Tolerance and an example on how to develop fault-tolerance microservices using Istio's Retry policy and MicroProfile Fault Tolerance's Fallback mechanism.
 :guide-author: Open Liberty
 = Developing fault-tolerant microservices with Istio Retry and MicroProfile Fallback
 
@@ -28,7 +28,7 @@
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
 
 
-Explore how to manage the impact of failures using MicroProfile and Istio Fault Tolerance by adding retry and fallback behavior to microservices.
+Explore how to manage the impact of failures using MicroProfile and Istio Fault Tolerance by adding retry and fallback behaviors to microservices.
 
 :kube: Kubernetes
 :istio: Istio
@@ -52,8 +52,8 @@ and https://download.eclipse.org/microprofile/microprofile-fault-tolerance-2.0/m
 policies with https://istio.io/docs/concepts/traffic-management/#timeouts-and-retries[Istio Retry^] 
 to make your microservices more resilient to common failures like network problems.
 
-Microservices that are created using MicroProfile can be freely deployed in a service mesh architecture to reduce the complexity 
-associated with microservice functionality. Istio is a service mesh, meaning that it’s a platform for managing how microservices interact with each other and the outside world.
+Microservices that are created using Eclipse MicroProfile can be freely deployed in a service mesh to reduce the complexity 
+associated with managing microservices. Istio is a service mesh, meaning that it’s a platform for managing how microservices interact with each other and the outside world.
 {istio} consists of a control plane and sidecars that are injected into application pods. The sidecars contain
 the https://www.envoyproxy.io/[Envoy^] proxy. You can think of Envoy as a sidecar that intercepts
 and controls all the HTTP and TCP traffic to and from your container.
@@ -975,8 +975,7 @@ minikube delete
 
 == Great work! You're done!
 
-You learned how to use the Retry policy to make your microservice more resilient to failures 
-and how to build a fallback mechanism for your microservices.
+You learned how to build resilient microservices by using Istio Retry and MicroProfile Fallback. You also observed how MicroProfile Fault Tolerance integrates with and complements Istio Fault Tolerance.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 
