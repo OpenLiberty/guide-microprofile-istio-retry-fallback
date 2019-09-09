@@ -52,7 +52,7 @@ and https://download.eclipse.org/microprofile/microprofile-fault-tolerance-2.0/m
 policies with https://istio.io/docs/concepts/traffic-management/#timeouts-and-retries[Istio Retry^] 
 to make your microservices more resilient to common failures like network problems.
 
-Microservices that are created using Eclipse MicroProfile can be freely deployed in a service mesh architecture to reduce the complexity 
+Microservices that are created using Eclipse MicroProfile can be freely deployed in a service mesh to reduce the complexity 
 associated with managing microservices. Istio is a service mesh, meaning that it’s a platform for managing how microservices interact with each other and the outside world.
 {istio} consists of a control plane and sidecars that are injected into application pods. The sidecars contain
 the https://www.envoyproxy.io/[Envoy^] proxy. You can think of Envoy as a sidecar that intercepts
