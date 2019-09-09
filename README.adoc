@@ -60,28 +60,26 @@ and controls all the HTTP and TCP traffic to and from your container.
 If you would like to learn more about Istio, check out the https://openliberty.io/guides/istio-intro.html[Managing microservice traffic using Istio^] guide.
 
 MicroProfile and Istio both provide simple and flexible solutions to build fault-tolerant microservices. 
-Fault tolerance leverages different strategies to guide the execution and result of logic.
+Fault tolerance leverages different strategies for building robust behaviour to cope with unexpected failures.
 A few fault tolerance policies that MicroProfile can offer include Retry, Timeout, Circuit Breaker, Bulkhead, and Fallback.
 There is some overlap that exists between MicroProfile and Istio Fault Tolerance, such as the Retry policy.
 However, Istio does not offer any fallback capabilities.
 To view the available fault tolerance policies in MicroProfile and Istio, refer to the 
 https://www.eclipse.org/community/eclipse_newsletter/2018/september/MicroProfile_istio.php#faulttolerance[comparison between MicroProfile and Istio fault handling^].
 
-Use the Retry policy to fail quickly and recover from brief intermittent issues. 
+Use retry policies to fail quickly and recover from brief intermittent issues. 
 An application might experience these transient failures when a microservice is undeployed, a database is overloaded by queries, 
-the network connection becomes unstable, or the site host has a brief downtime. In these cases, rather than failing quickly on these transient failures, 
-the Retry policy provides another chance for the request to succeed. 
+the network connection becomes unstable, or the site host has a brief downtime. In these cases, rather than failing quickly on these transient failures,
+a retry policy provides another chance for the request to succeed. 
 Simply retrying the request might be all you need to do to make it succeed.
 
-Fallback offers an alternative result when an execution does not complete successfully.
+Fallback offers an alternative execution path when an execution does not complete successfully.
 You will use the `@Fallback` annotation from the MicroProfile Fault Tolerance specification to define criteria 
 for when to provide an alternative solution for a failed execution.
 
-You will create a microservice ecosystem demonstrating MicroProfile Fault Tolerance with Istio fault handling.
-Both libraries can be enabled when you want your microservices to have a service mesh architecture with Istio, 
+You will develop microservices that demonstrate MicroProfile Fault Tolerance with Istio fault handling.
+Both MicroProfile and Istio can be used when you want your microservices to have a service mesh architecture with Istio, 
 and use MicroProfile to provide the extra fault tolerance policies that do not exist within Istio.
-However, microservices that have the same fault tolerance policy enabled by both MicroProfile and Istio will
-have a behaviour that is not as expected. 
 
 The application that you will be working with is an `inventory` service, which collects, stores, and returns the system properties. 
 It uses the `system` service to retrieve the system properties for a particular host. 
@@ -349,7 +347,7 @@ system-deployment        1/1       1            1           1m
 
 You will make a request to the `system` service from the `inventory` service to access the 
 JVM system properties of your running container. The Istio [hotspot=gateway file=0]`gateway` is the entry point for HTTP requests to the cluster. 
-The `Host` header of your `system` service and `inventory` service to be `system.example.com` and `inventory.example.com`, respectively. 
+The `Host` header of your `system` service and `inventory` service has a value of `system.example.com` and `inventory.example.com`, respectively. 
 You can set the `Host` header with the `-H` option of the `curl` command.
 
 services.yaml
@@ -428,7 +426,7 @@ You will see that the above command returns 1, meaning that 1 request is made to
 1
 ----
 
-Now you will make the `system` service unavailable and MicroProfile's Retry policy will be performed.
+Now you will make the `system` service unavailable and observe that MicroProfile's Retry policy will take effect.
 
 Pause the `system` service pod to simulate that the service is unavailable. 
 Remember to replace `[system-pod-name]` with the pod name associated with your `system` service.
@@ -485,7 +483,7 @@ content-language: en-US
 ----
 
 The request returns a `503` response code, as the `system` service is unavailable.
-However, the request was retried several times with MicroProfile `@Retry` before failing.
+However, the request retried several times as per what is specified by the MicroProfile `@Retry` annotation.
 
 See the number of times that the service was retried:
 
@@ -552,7 +550,7 @@ Other https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filter
 can also be specified in [hotspot=retryOn file=0]`retryOn`. An optional field that can be provided to Istio's Retry policy
 is `perTryTimeout`, which indicates the amount of time that is allocated to each retry attempt. 
 
-After integrating an Istio Retry policy into your microservices, deploy your microservices again: 
+After configuring the numnber of retries performed by Istio for your microservices, deploy your microservices again: 
 
 [role=command]
 ```
@@ -624,7 +622,7 @@ The above command returns 60, indicating that a total of 60 requests are made to
 The 3 default Istio requests for the `system` service and the 5 requests for the `inventory` service
 that you enabled in the [hotspot file=0]`traffic.yaml` file, are multiplied by the 4 requests sent by MicroProfile.
 
-Later, you will disable some of MicroProfile's capabilities, to have your `system` service retry with only Istio's Retry policy. 
+Next, you will disable some MicroProfile Fault Tolerance capabilities, to have your `system` service retry with only Istio's Retry policy. 
 
 
 // =================================================================================================
@@ -633,19 +631,19 @@ Later, you will disable some of MicroProfile's capabilities, to have your `syste
 
 == Turning off MicroProfile Fault Tolerance
 
-When microservices have the same fault tolerance policy enabled by both MicroProfile and Istio, the behaviour of the policy is not as expected. 
+When we have both MicroProfile and Istio Fault Tolerance capabilities enabled, there is a compounding effect that may be unexpected. 
 If both MicroProfile and Istio set their own Retry policies on a service,
 the maximum number of retries that occur is not equivalent to either of the number of retries specified in MicroProfile or Istio. 
-The microservice actually multiplies the number of MicroProfile and Istio retries.
+The number of retries set by MicroProfile and Istio are actually multiplied.
 
-In the case that you want your microservices to use a service-mesh architecture, such as Istio, and use it's fault handling without interfering with
-the service's MicroProfile capabilities, you can use a config property offered by MicroProfile.
+In the case that you want to use Istio as your service mesh and its fault tolerance capabilities, 
+you can turn off MicroProfile Fault Tolerance via a property to avoid any overlap in behaviours.
 
 MicroProfile Fault Tolerance offers a config property `MP_Fault_Tolerance_NonFallback_Enabled` that disables all 
-MicroProfile Fault Tolerance capabilities except fallback. If `MP_Fault_Tolerance_NonFallback_Enabled` is set to false, all of the MicroProfile
-annotations, including `@Retry`, will be switched off and only keep `@Fallback` available to use.
+MicroProfile Fault Tolerance capabilities except fallback. If `MP_Fault_Tolerance_NonFallback_Enabled` is set to false, all of the 
+specified MicroProfile annotations, including `@Retry`, won't take effect and only keep `@Fallback` available to use.
 
-The `MP_Fault_Tolerance_NonFallback_Enabled` config property must be defined in a ConfigMap.
+You will define the `MP_Fault_Tolerance_NonFallback_Enabled` config property in a ConfigMap.
 ConfigMaps store configuration settings about a Kubernetes pod. This configuration needs to be loaded into the pod as an environment variable to be 
 used by the pod's containers. The environment variables are defined in the pod's specification using the `envFrom` field. 
 
@@ -672,7 +670,7 @@ to inject the [hotspot=configMap file=0]`ConfigMap` with the [hotspot=nonFallbac
 The [hotspot=configName file=0]`name` of the [hotspot=configMap file=0]`ConfigMap`, which is [hotspot=configName file=0]`inventory-config`, 
 becomes the environment variable [hotspot=configName2 file=0]`name` that is specified in the [hotspot=invConfig file=0]`envFrom` field. 
 
-Deploy your microservices again to turn off all MicroProfile capabilities, except fallback:
+Deploy your microservices again to turn off all MicroProfile Fault Tolerance capabilities, except fallback:
 
 [role=command]
 ```
@@ -760,13 +758,12 @@ services.yaml
 include::finish/services.yaml[]
 ----
 
-Since retrying the requests to your `system` service is still not successful, you need a plan to "fall back" on when the requests fail. 
-You will create a fallback method to deal with the failed requests to your `system` service.
+Since retrying the requests to the `system` service still does not give you success, you need a "fall back" plan. 
+You will create a fallback method as an alternative solution when the strategy to retry requests to the `system` service have failed.
 
 Although you disabled MicroProfile `@Retry` and other MicroProfile Fault Tolerance policies using the 
 [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property, the fallback policy is still available to use.
-As mentioned before, Istio does not offer any fallback capabilities, and so the MicroProfile `@Fallback` annotation must be used 
-to add fallback to your microservices.
+As mentioned before, Istio does not offer any fallback capabilities, so the MicroProfile Fallback capability can be used to complement it.
 
 The `@Fallback` annotation dictates a method to call when the original method encounters a failed execution. 
 If your microservices have a Retry policy specified, then the fallback occurs after all of the retries have failed. 
@@ -791,7 +788,7 @@ The [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method, which is th
 [hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method, prints out a warning message in the browser saying that 
 the `system` service may not be running.
 
-Rebuild your application and integrate the Fallback policy into your microservices:
+Rebuild your application to add fallback behaviour to your microservices:
 
 [role=command]
 ```
@@ -806,7 +803,7 @@ docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 ```
 
-Deploy your microservices again to turn off all MicroProfile capabilities, except fallback:
+Deploy your microservices again to turn off all MicroProfile Fault Tolerance capabilities, except fallback:
 
 [role=command]
 ```
@@ -859,8 +856,8 @@ server: istio-envoy
 transfer-encoding: chunked
 ----
 
-You can see that the request is now successful and returns a `200` response code, since the fallback method is called 
-when the `system` service is not available.
+You can see that the request is now successful and returns a `200` response code, with a header called
+`x-from-fallback`, indicating that the fallback method is called when the `system` service is not available.
 
 See the number of times that the service is retried before the fallback method is called:
 
