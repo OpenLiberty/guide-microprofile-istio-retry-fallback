@@ -9,7 +9,7 @@
 // Contributors:
 //     IBM Corporation
 //
-:projectid: microprofile-istio-retry-fallback-fallback
+:projectid: microprofile-istio-retry-fallback
 :page-layout: guide-multipane
 :page-duration: 30 minutes
 :page-releasedate: 2019-09-13
