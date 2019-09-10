@@ -69,13 +69,7 @@
            <type>esa</type>
            <scope>provided</scope>
         </dependency>
-        <!-- end::mpFaultTolerance[] -->        
-        <dependency>
-           <groupId>io.openliberty.features</groupId>
-           <artifactId>mpMetrics-2.0</artifactId>
-           <type>esa</type>
-           <scope>provided</scope>
-        </dependency>     
+        <!-- end::mpFaultTolerance[] --> 
     </dependencies>
     
     <profiles>
