@@ -518,7 +518,7 @@ You will see the following output:
 The above command returns 37, since there were a total of 37 requests made to the `system` service.
 By default, Istio will retry 2 times to resolve any issues with a `503` response code.
 Including the initial requests and the retries, the requests made by Istio are multiplied by the requests made by MicroProfile.
-Hence, the 3 requests from `system` service and the 3 requests from the `inventory` service are multiplied by the 4 MicroProfile requests.
+Hence, the 3 requests from the `system` service are multiplied by the 3 requests from the `inventory` service and multiplied by the 4 MicroProfile requests.
 
 
 // =================================================================================================
