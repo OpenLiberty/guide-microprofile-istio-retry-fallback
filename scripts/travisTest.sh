@@ -11,7 +11,7 @@ kubectl get nodes
 
 ISTIO_LATEST=`curl -L -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.tag_name'`
 
-if [ -z $ISTIO_LATEST ]
+if [ $ISTIO_LATEST == "null" ]
     then
         ISTIO_LATEST=1.2.5
 fi
