@@ -28,7 +28,7 @@
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
 
 
-Explore how to manage the impact of failures using MicroProfile and Istio Fault Tolerance by adding retry and fallback behaviours to microservices.
+Explore how to manage the impact of failures by using MicroProfile and Istio Fault Tolerance to add retry and fallback behaviours to microservices.
 
 :kube: Kubernetes
 :istio: Istio
@@ -50,7 +50,7 @@ Explore how to manage the impact of failures using MicroProfile and Istio Fault 
 You will learn how to combine https://download.eclipse.org/microprofile/microprofile-fault-tolerance-2.0/microprofile-fault-tolerance-spec.html#retry[MicroProfile Retry^] 
 and https://download.eclipse.org/microprofile/microprofile-fault-tolerance-2.0/microprofile-fault-tolerance-spec.html#fallback[Fallback^]
 policies with https://istio.io/docs/concepts/traffic-management/#timeouts-and-retries[Istio Retry^] 
-to make your microservices more resilient to common failures like network problems.
+to make your microservices more resilient to common failures, such as network problems.
 
 Microservices that are created using Eclipse MicroProfile can be freely deployed in a service mesh to reduce the complexity 
 associated with managing microservices. Istio is a service mesh, meaning that it’s a platform for managing how microservices interact with each other and the outside world.
@@ -60,7 +60,7 @@ and controls all the HTTP and TCP traffic to and from your container.
 If you would like to learn more about Istio, check out the https://openliberty.io/guides/istio-intro.html[Managing microservice traffic using Istio^] guide.
 
 MicroProfile and Istio both provide simple and flexible solutions to build fault-tolerant microservices. 
-Fault tolerance leverages different strategies for building robust behaviour to cope with unexpected failures.
+Fault tolerance provides different strategies for building robust behaviour to cope with unexpected failures.
 A few fault tolerance policies that MicroProfile can offer include Retry, Timeout, Circuit Breaker, Bulkhead, and Fallback.
 There is some overlap that exists between MicroProfile and Istio Fault Tolerance, such as the Retry policy.
 However, Istio does not offer any fallback capabilities.
@@ -106,7 +106,7 @@ include::{common-includes}/gitclone.adoc[]
 // =================================================================================================
 
 :minikube-start: minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.13.0
-:docker-desktop-description: Check your settings to ensure that you have an adequate amount of memory allocated to your Docker Desktop enviornment, 8GB is recommended but 4GB should be adequate if you don't have enough RAM.
+:docker-desktop-description: Ensure that you have enough memory allocated to your Docker Desktop enviornment. 8GB is recommended but 4GB should be adequate if you don't have enough RAM.
 :minikube-description: The memory flag allocates 8GB of memory to your Minikube cluster. If you don't have enough RAM, then 4GB should be adequate.
 [role=command]
 include::{common-includes}/kube-start.adoc[]
@@ -147,8 +147,7 @@ Verify that Istio was successfully deployed by running the following command:
 kubectl get deployments -n istio-system
 ```
 
-All the values in the `AVAILABLE` column will have a value of `1` after
-the deployment is complete.
+After the deployment is complete, all the values in the `AVAILABLE` column will have a value of 1.
 
 [source, role="no_copy"]
 ----
@@ -178,8 +177,8 @@ Finally, create the `istio-injection` label and set its value to `enabled`.
 kubectl label namespace default istio-injection=enabled
 ```
 
-Adding this label enables automatic {istio} sidecar injection. Automatic injection means that sidecars will
-automatically be injected into your pods when you deploy your application.
+Adding this label enables automatic {istio} sidecar injection. Automatic injection means that sidecars are
+automatically injected into your pods when you deploy your application.
 
 // =================================================================================================
 // Enabling MicroProfile Fault Tolerance
@@ -221,11 +220,11 @@ include::finish/inventory/src/main/java/io/openliberty/guides/inventory/Inventor
 
 === Adding the MicroProfile @Retry annotation
 
-To simulate that your `system` service is temporarily down, due to brief intermittent issues, you will pause the pod that is associated
-with your `system` service, and try to send requests to the service. When the `system` pod is paused, requests to the service return a `503` status code, 
+To simulate that your `system` service is temporarily down due to brief intermittent issues, you will pause the pod that is associated
+with your `system` service, then try to send requests to the service. When the `system` pod is paused, requests to the service return a `503` status code, 
 and the [hotspot=getProperties file=0]`systemClient.getProperties()` in [hotspot file=0]`InventoryResource.java` throws a `WebApplicationException`. 
 
-To retry the requests to your `system` service after an `WebApplicationException` has occurred, add the `@Retry` annotation.
+To retry the requests to your `system` service after a `WebApplicationException` has occurred, add the `@Retry` annotation.
 
 [role="code_command hotspot", subs="quotes"]
 ----
@@ -233,8 +232,8 @@ To retry the requests to your `system` service after an `WebApplicationException
 `inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java`
 ----
 [role="edit_command_text"]
-Add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method, 
-to retry the service request a maximum of 3 times, only when an [hotspot=webApplicationException file=0]`WebApplicationException` occurs.
+To retry the service request a maximum of 3 times, only when a [hotspot=webApplicationException file=0]`WebApplicationException` occurs,
+add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method.
 
 InventoryResource.java
 [source, Java, linenums, role='code_column hide_tags=copyright,fallback,fallbackMethod']
@@ -247,7 +246,7 @@ A request to a service might fail for many different reasons. The default Retry 
 However, you can base a Retry policy on a specific exception by using the `retryOn` parameter. You can identify more than one exception 
 as an array of values. For example, `@Retry(retryOn = {RuntimeException.class, TimeoutException.class})`.
 
-You can set limits on the number of retry attempts to prevent a busy service from becoming overloaded with retry requests.
+You can set limits on the number of retry attempts to avoid overloading a busy service with retry requests.
 The `@Retry` annotation has the `maxRetries` parameter to limit the number of retry attempts. The default number for `maxRetries` is 3 requests.
 The integer value must be greater than or equal to -1. A value of -1 indicates to continue retrying indefinitely.
 
@@ -400,7 +399,7 @@ transfer-encoding: chunked
 
 Since the `system` service is available, the request to the service is successful and returns a `200` response code.
 
-To see the number of times that the `system` service was called, check the logs of the `system` pod using the `kubectl logs` command.
+To see the number of times that the `system` service was called, check the logs of the `system` pod by using the `kubectl logs` command.
 Replace `[system-pod-name]` with the pod name associated with
 your `system` service, which you previously saw when running the `kubectl get pods` command.
 
@@ -422,7 +421,7 @@ kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
 ****
 
-You will see that the above command returns 1, meaning that 1 request is made to the `system` service:
+You will see that the `kubectl logs` command returns a value of 1, meaning that 1 request is made to the `system` service:
 
 [source, role="no_copy"]
 ----
@@ -432,7 +431,7 @@ You will see that the above command returns 1, meaning that 1 request is made to
 Now you will make the `system` service unavailable and observe that MicroProfile's Retry policy will take effect.
 
 Pause the `system` service pod to simulate that the service is unavailable. 
-Remember to replace `[system-pod-name]` with the pod name associated with your `system` service.
+Remember to replace `[system-pod-name]` with the pod name that is associated with your `system` service.
 
 
 [role=command]
@@ -485,8 +484,8 @@ x-envoy-upstream-service-time: 2929
 content-language: en-US
 ----
 
-The request returns a `503` response code, as the `system` service is unavailable.
-However, the request retried several times as per what is specified by the MicroProfile `@Retry` annotation.
+Since the the `system` service is unavailable, the request returns a `503` response code.
+However, the request retried several times, as specified by the MicroProfile `@Retry` annotation.
 
 See the number of times that the service was retried:
 
@@ -515,11 +514,11 @@ You will see the following output:
 37
 ----
 
-The above command returns 37, since there were a total of 37 requests made to the `system` service.
+The above command returns 37, since there was a total of 37 requests made to the `system` service.
 By default, Istio will retry 2 times to resolve any issues with a `503` response code.
 Including the initial requests and the retries, the requests made by Istio are multiplied by the requests made by MicroProfile.
-Hence, the 3 requests from the `system` service are multiplied by the 3 requests from the `inventory` service and multiplied by the 4 MicroProfile requests.
-
+Hence, the 3 requests from the `system` service, the 3 requests from the `inventory` service, and the 4 MicroProfile requests are multiplied together,
+giving a total of 36 requests. Including the succesful request that you made before you paused the `system` service, there was a total of 37 requests.
 
 // =================================================================================================
 // Enabling Istio Fault Tolerance
@@ -527,7 +526,7 @@ Hence, the 3 requests from the `system` service are multiplied by the 3 requests
 
 == Enabling Istio Fault Tolerance
 
-You previously implemented the Retry policy to retry requests to your `system` service using MicroProfile Fault Tolerance.
+Previously, you implemented the Retry policy to retry requests to your `system` service by using MicroProfile Fault Tolerance.
 This Retry policy can also be implemented with Istio Fault Tolerance.
 
 [role="code_command hotspot", subs="quotes"]
@@ -541,19 +540,19 @@ traffic.yaml
 include::finish/traffic.yaml[]
 ----
 [role="edit_command_text"]
-Add the [hotspot=istioRetry file=0]`retries` field under the [hotspot=route file=0]`route` specification in the [hotspot file=0]`traffic.yaml` file, 
-to allow Istio to retry requests a maximum of 4 times, when the request returns any `5xx` response code. 
+Add the [hotspot=istioRetry file=0]`retries` field under the [hotspot=route file=0]`route` specification in the [hotspot file=0]`traffic.yaml` file. 
+This tells Istio to retry requests a maximum of 4 times when the request returns any `5xx` response code. 
 
 The [hotspot=attempts file=0]`attempts` field is required in the configuration of the 
-https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service/#HTTPRetry[Istio Retry^] policy, and it indicates the
-maximum number of retries that will be attempted for a given request. To retry a request on specific conditions, the
-[hotspot=retryOn file=0]`retryOn` field is used. Since your paused `system` service responds with a `503` response code, 
+https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service/#HTTPRetry[Istio Retry^] policy. This field specifies the
+maximum number of retries that will be attempted for a given request. To retry a request on specific conditions, use the
+[hotspot=retryOn file=0]`retryOn` field. Since your paused `system` service responds with a `503` response code, 
 you set [hotspot=retryOn file=0]`retryOn` to be `5xx`. 
 Other https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on[retry conditions^] 
-can also be specified in [hotspot=retryOn file=0]`retryOn`. An optional field that can be provided to Istio's Retry policy
-is `perTryTimeout`, which indicates the amount of time that is allocated to each retry attempt. 
+can also be specified in [hotspot=retryOn file=0]`retryOn`. Optionally, the `perTryTimeout` field can be added to Istio's Retry policy 
+to specify the amount of time that is allocated to each retry attempt. 
 
-After configuring the numnber of retries performed by Istio for your microservices, deploy your microservices again: 
+After you configure the number of retries that Istio performs, deploy your microservices again: 
 
 [role=command]
 ```
@@ -562,7 +561,7 @@ kubectl replace --force -f traffic.yaml
 ```
 
 Wait until all of your deployments are ready and available.
-The `[system-pod-name]` will be regenerated and is different than the previous one you have been using.
+The `[system-pod-name]` will be regenerated and is different than the one you used previously.
 Run the `kubectl get pods` command to get the new `[system-pod-name]`.
 Pause the `system` service pod to simulate that the service is unavailable.
 
@@ -593,8 +592,8 @@ curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/
 ```
 ****
 
-You will see that the request still returns a `503` response code, as the `system` service is unavailable.
-This time however, the request was retried several times with Istio before failing.
+Since the `system` service is unavailable, the request still returns a `503` response code.
+This time, however, Istio retried the request several more times before failing.
 
 See the number of times that the service was retried:
 
@@ -623,11 +622,11 @@ You will see the following output:
 60
 ----
 
-The above command returns 60, indicating that a total of 60 requests are made to the `system` service.
-The 3 default Istio requests for the `system` service and the 5 requests for the `inventory` service
-that you enabled in the [hotspot file=0]`traffic.yaml` file, are multiplied by the 4 requests sent by MicroProfile.
+The above command returns a value of 60, indicating that a total of 60 requests are made to the `system` service.
+The 3 default Istio requests for the `system` service, the 5 requests for the `inventory` service
+that you enabled in the [hotspot file=0]`traffic.yaml` file, and the 4 requests sent by MicroProfile are multiplied together.
 
-Next, you will disable some MicroProfile Fault Tolerance capabilities, to have your `system` service retry with only Istio's Retry policy. 
+Next, you will disable some MicroProfile Fault Tolerance capabilities, so that your `system` service retries with only Istio's Retry policy. 
 
 
 // =================================================================================================
@@ -641,20 +640,21 @@ If both MicroProfile and Istio set their own Retry policies on a service,
 the maximum number of retries that occur is not equivalent to either of the number of retries specified in MicroProfile or Istio. 
 The number of retries set by MicroProfile and Istio are actually multiplied.
 
-In the case that you want to use Istio as your service mesh and its fault tolerance capabilities, 
-you can turn off MicroProfile Fault Tolerance via a property to avoid any overlap in behaviours.
+If you want to use Istio as your service mesh and only its fault tolerance capabilities, 
+you can turn off MicroProfile Fault Tolerance by adding a property. This configuration avoids any overlap in behaviours.
 
 MicroProfile Fault Tolerance offers a config property `MP_Fault_Tolerance_NonFallback_Enabled` that disables all 
-MicroProfile Fault Tolerance capabilities except fallback. If `MP_Fault_Tolerance_NonFallback_Enabled` is set to false, all of the 
-behaviours specified by the MicroProfile Fault Tolerance annotations, including `@Retry`, won't take effect except for the `@Fallback` behaviour.
+MicroProfile Fault Tolerance capabilities except fallback. If `MP_Fault_Tolerance_NonFallback_Enabled` is set to false, only 
+the `@Fallback` behaviour is enabled. The other behaviours specified by the MicroProfile Fault Tolerance annotations, 
+including `@Retry`, won't take effect.
 
 You will define the `MP_Fault_Tolerance_NonFallback_Enabled` config property in a ConfigMap.
-ConfigMaps store configuration settings about a Kubernetes pod. This configuration needs to be loaded into the pod as an environment variable to be 
-used by the pod's containers. The environment variables are defined in the pod's specification using the `envFrom` field. To learn more about ConfigMaps,
+ConfigMaps store configuration settings about a Kubernetes pod. This configuration is loaded into the pod as an environment variable that is 
+used by the pod's containers. The environment variables are defined in the pod's specification by using the `envFrom` field. To learn more about ConfigMaps,
 check out the https://openliberty.io/guides/kubernetes-microprofile-config.html[Configuring microservices running in Kubernetes^] guide.
 
-You will use the `MP_Fault_Tolerance_NonFallback_Enabled` config property to disable the retries performed by MicroProfile, 
-to only allow Istio to perform the retries. 
+Use the `MP_Fault_Tolerance_NonFallback_Enabled` config property to disable the retries performed by MicroProfile, 
+so that only Istio performs retries. 
 
 
 [role="code_command hotspot", subs="quotes"]
@@ -714,8 +714,8 @@ curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/
 ```
 ****
 
-You will see that the request still returns a `503` response code, as the `system` service is unavailable.
-This time however, the request was retried several times with Istio, without any retries from MicroProfile.
+Since the `system` service is unavailable, the request still returns a `503` response code.
+This time, however, the request was retried several times with Istio, without any retries from MicroProfile.
 
 See the number of times that the service was retried:
 
@@ -765,11 +765,11 @@ services.yaml
 include::finish/services.yaml[]
 ----
 
-Since retrying the requests to the `system` service still does not give you success, you need a "fall back" plan. 
-You will create a fallback method as an alternative solution when the strategy to retry requests to the `system` service have failed.
+Since retrying the requests to the `system` service still does not succeed, you need a "fall back" plan. 
+You will create a fallback method as an alternative solution for when retry requests to the `system` service have failed.
 
 Although you disabled MicroProfile `@Retry` and other MicroProfile Fault Tolerance policies using the 
-[hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property, the fallback policy is still available to use.
+[hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property, the fallback policy is still available.
 As mentioned before, Istio does not offer any fallback capabilities, so the MicroProfile Fallback capability can be used to complement it.
 
 The `@Fallback` annotation dictates a method to call when the original method encounters a failed execution. 
@@ -792,7 +792,7 @@ to call the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method when
 
 
 The [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method, which is the designated fallback method for the original 
-[hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method, prints out a warning message in the browser saying that 
+[hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method, prints out a warning message in the browser that says 
 the `system` service may not be running.
 
 Rebuild your application to add fallback behaviour to your microservices:
@@ -897,7 +897,7 @@ You will see the following output:
 The above command returns 3, indicating that a total of 3 requests are made to the `system` service.
 The Istio retries that you enabled on the `inventory` service are not performed, since the Fallback policy is enabled. 
 However, the 3 default requests by Istio on the server end are still performed. 
-Since all of these requests failed, the fallback method [hotspot=fallbackMethod file=1]`getPropertiesFallback()` is called. 
+Since all of these requests failed, the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` fallback method is called. 
 
 
 // =================================================================================================
@@ -907,7 +907,7 @@ Since all of these requests failed, the fallback method [hotspot=fallbackMethod 
 == Tearing down your environment
 
 When you are done checking out the MicroProfile and Istio Fault Tolerance features, 
-you might want to teardown all the deployed resources as a cleanup step.
+you might want to tear down all the deployed resources as a cleanup step.
 
 Delete your resources from the cluster:
 
@@ -932,7 +932,7 @@ Navigate to the directory where you extracted {istio} and delete the {istio} res
 kubectl delete -f install/kubernetes/istio-demo.yaml
 ```
 
-Next, delete the Istio custom resource definitions, by running the following command:
+Next, delete the Istio custom resource definitions by running the following command:
 
 ****
 [system]#*{mac}*#
