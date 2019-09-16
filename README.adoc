@@ -117,20 +117,22 @@ First, go to the https://github.com/istio/istio/releases/latest[{istio} release 
 
 Next, deploy the {istio} custom resource definitions. Custom resource definitions allow {istio} to define custom {kube} resources that you can use in your resource definition files.
 
-****
-[system]#*{linux} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
 
+[.tab_content.mac_section.linux_section]
+--
 [role=command]
 ```
 for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
 ```
+--
 
-[system]#*{win}*#
-[role=command]
+[.tab_content.windows_section]
+--
 ```
 FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl apply -f %i
 ```
-****
+--
 
 Next, deploy {istio} resources to your cluster by running the `kubectl apply` command, which creates or updates
 {kube} resources defined in a yaml file.
@@ -360,10 +362,10 @@ include::finish/services.yaml[]
 
 Make a request to the service by using `curl`:
 
-****
-[system]#*{win} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.windows_section.mac_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
@@ -373,15 +375,15 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 to make requests using a graphical interface. To make a request with Postman, enter `\http://localhost/inventory/systems/system-service`
 into the URL bar. Next, switch to the `Headers` tab and add a header with key of `Host` and value of `inventory.example.com`.
 Finally, click the blue `Send` button to make the request.
+--
 
-[system]#*{linux}*#
-
-
+[.tab_content.linux_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
 ```
-****
+--
 
 You will see the following output:
 
@@ -403,23 +405,23 @@ To see the number of times that the `system` service was called, check the logs 
 Replace `[system-pod-name]` with the pod name associated with
 your `system` service, which you previously saw when running the `kubectl get pods` command.
 
-****
-[system]#*{mac} | {linux}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.mac_section.linux_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 ```
+--
 
-[system]#*{win}*#
-
-
+[.tab_content.windows_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
-****
+--
 
 You will see that the `kubectl logs` command returns a value of 1, meaning that 1 request is made to the `system` service:
 
@@ -449,26 +451,25 @@ Pausing the defaultServer server completed.
 
 Make a request to the service by using `curl`:
 
-****
-[system]#*{win} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.windows_section.mac_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
 ```
 
 If the `curl` command is unavailable, then use https://www.getpostman.com/[Postman^].
+--
 
-[system]#*{linux}*#
-
-
+[.tab_content.linux_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
 ```
-****
-
+--
 
 You will see the following output:
 
@@ -489,23 +490,24 @@ However, the request retried several times, as specified by the MicroProfile `@R
 
 See the number of times that the service was retried:
 
-****
-[system]#*{mac} | {linux}*#
 
+include::{common-includes}/os-tabs.adoc[]
 
+[.tab_content.mac_section.linux_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 ```
+--
 
-[system]#*{win}*#
-
-
+[.tab_content.windows_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
-****
+--
 
 You will see the following output:
 
@@ -572,48 +574,48 @@ kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause
 
 Make a request to the service by using `curl`:
 
-****
-[system]#*{win} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.windows_section.mac_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
 ```
 
 If the `curl` command is unavailable, then use https://www.getpostman.com/[Postman^].
+--
 
-[system]#*{linux}*#
-
-
+[.tab_content.linux_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
 ```
-****
+--
 
 Since the `system` service is unavailable, the request still returns a `503` response code.
 This time, however, Istio retried the request several more times before failing.
 
 See the number of times that the service was retried:
 
-****
-[system]#*{mac} | {linux}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.mac_section.linux_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 ```
+--
 
-[system]#*{win}*#
-
-
+[.tab_content.windows_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
-****
+--
 
 You will see the following output:
 
@@ -694,48 +696,48 @@ kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause
 
 Make a request to the service by using `curl`:
 
-****
-[system]#*{win} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.windows_section.mac_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
 ```
 
 If the `curl` command is unavailable, then use https://www.getpostman.com/[Postman^].
+--
 
-[system]#*{linux}*#
-
-
+[.tab_content.linux_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
 ```
-****
+--
 
 Since the `system` service is unavailable, the request still returns a `503` response code.
 This time, however, the request was retried several times with Istio, without any retries from MicroProfile.
 
 See the number of times that the service was retried:
 
-****
-[system]#*{mac} | {linux}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.mac_section.linux_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 ```
+--
 
-[system]#*{win}*#
-
-
+[.tab_content.windows_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
-****
+--
 
 You will see the following output:
 
@@ -829,25 +831,25 @@ kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause
 
 Make a request to the service by using `curl`:
 
-****
-[system]#*{win} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.windows_section.mac_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://localhost/inventory/systems/system-service -I
 ```
 
 If the `curl` command is unavailable, then use https://www.getpostman.com/[Postman^].
+--
 
-[system]#*{linux}*#
-
-
+[.tab_content.linux_section]
+--
 [role=command]
 ```
 curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
 ```
-****
+--
 
 You will see the following output:
 
@@ -869,23 +871,23 @@ You can see that the request is now successful and returns a `200` response code
 
 See the number of times that the service is retried before the fallback method is called:
 
-****
-[system]#*{mac} | {linux}*#
+include::{common-includes}/os-tabs.adoc[]
 
-
+[.tab_content.mac_section.linux_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 ```
+--
 
-[system]#*{win}*#
-
-
+[.tab_content.windows_section]
+--
 [role=command]
 ```
 kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
 ```
-****
+--
 
 You will see the following output:
 
@@ -934,26 +936,23 @@ kubectl delete -f install/kubernetes/istio-demo.yaml
 
 Next, delete the Istio custom resource definitions by running the following command:
 
-****
-[system]#*{mac}*#
 
+include::{common-includes}/os-tabs.adoc[]
+
+[.tab_content.mac_section.linux_section]
+--
 [role=command]
 ```
 for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f $i; done
 ```
+--
 
-[system]#*{win}*#
-[role=command]
+[.tab_content.windows_section]
+--
 ```
 FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl delete -f %i
 ```
-
-[system]#*{linux}*#
-
-[role=command]
-```
-for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f $i; done
-```
+--
 
 Perform the following steps to return your environment to a clean state.
 
