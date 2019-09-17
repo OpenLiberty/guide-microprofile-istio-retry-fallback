@@ -949,6 +949,7 @@ for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f
 
 [.tab_content.windows_section]
 --
+[role=command]
 ```
 FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl delete -f %i
 ```
@@ -970,8 +971,6 @@ eval $(minikube docker-env -u)
 minikube stop
 minikube delete
 ```
-****
-
 
 // =================================================================================================
 // finish
