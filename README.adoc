@@ -117,6 +117,8 @@ First, go to the https://github.com/istio/istio/releases/latest[{istio} release 
 
 Next, deploy the {istio} custom resource definitions. Custom resource definitions allow {istio} to define custom {kube} resources that you can use in your resource definition files.
 
+include::{common-includes}/os-tabs.adoc[]
+
 [.tab_content.mac_section.linux_section]
 --
 [role=command]
@@ -360,6 +362,8 @@ include::finish/services.yaml[]
 
 Make a request to the service by using `curl`:
 
+include::{common-includes}/os-tabs.adoc[]
+
 [.tab_content.windows_section.mac_section]
 --
 [role=command]
@@ -400,6 +404,8 @@ Since the `system` service is available, the request to the service is successfu
 To see the number of times that the `system` service was called, check the logs of the `system` pod by using the `kubectl logs` command.
 Replace `[system-pod-name]` with the pod name associated with
 your `system` service, which you previously saw when running the `kubectl get pods` command.
+
+include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.mac_section.linux_section]
 --
@@ -445,6 +451,8 @@ Pausing the defaultServer server completed.
 
 Make a request to the service by using `curl`:
 
+include::{common-includes}/os-tabs.adoc[]
+
 [.tab_content.windows_section.mac_section]
 --
 [role=command]
@@ -481,6 +489,8 @@ Since the the `system` service is unavailable, the request returns a `503` respo
 However, the request retried several times, as specified by the MicroProfile `@Retry` annotation.
 
 See the number of times that the service was retried:
+
+include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.mac_section.linux_section]
 --
@@ -563,6 +573,8 @@ kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause
 
 Make a request to the service by using `curl`:
 
+include::{common-includes}/os-tabs.adoc[]
+
 [.tab_content.windows_section.mac_section]
 --
 [role=command]
@@ -585,6 +597,8 @@ Since the `system` service is unavailable, the request still returns a `503` res
 This time, however, Istio retried the request several more times before failing.
 
 See the number of times that the service was retried:
+
+include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.mac_section.linux_section]
 --
@@ -681,6 +695,8 @@ kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause
 
 Make a request to the service by using `curl`:
 
+include::{common-includes}/os-tabs.adoc[]
+
 [.tab_content.windows_section.mac_section]
 --
 [role=command]
@@ -703,6 +719,8 @@ Since the `system` service is unavailable, the request still returns a `503` res
 This time, however, the request was retried several times with Istio, without any retries from MicroProfile.
 
 See the number of times that the service was retried:
+
+include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.mac_section.linux_section]
 --
@@ -812,6 +830,8 @@ kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause
 
 Make a request to the service by using `curl`:
 
+include::{common-includes}/os-tabs.adoc[]
+
 [.tab_content.windows_section.mac_section]
 --
 [role=command]
@@ -849,6 +869,8 @@ You can see that the request is now successful and returns a `200` response code
 `x-from-fallback`, indicating that the fallback method is called when the `system` service is not available.
 
 See the number of times that the service is retried before the fallback method is called:
+
+include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.mac_section.linux_section]
 --
@@ -912,6 +934,8 @@ kubectl delete -f install/kubernetes/istio-demo.yaml
 ```
 
 Next, delete the Istio custom resource definitions by running the following command:
+
+include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.mac_section.linux_section]
 --
