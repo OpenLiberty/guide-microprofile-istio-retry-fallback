@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import io.openliberty.guides.inventory.client.SystemClient;
 import io.openliberty.guides.inventory.client.UnknownUrlException;
@@ -41,7 +42,9 @@ import io.openliberty.guides.inventory.model.InventoryList;
 @Path("/systems")
 public class InventoryResource {
 
-  private final String SYS_HTTP_PORT = System.getProperty("system.http.port");
+  @Inject
+  @ConfigProperty(name = "system.http.port")
+  String SYS_HTTP_PORT;
     
   @Inject
   InventoryManager manager;
