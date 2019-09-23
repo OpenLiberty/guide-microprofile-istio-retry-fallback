@@ -21,4 +21,4 @@ script: ../scripts/travisTest.sh
 branches:
   only:
   - master
-  - dev
+  - qa
