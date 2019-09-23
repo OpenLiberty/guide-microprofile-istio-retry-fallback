@@ -129,6 +129,7 @@ for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f 
 
 [.tab_content.windows_section]
 --
+[role=command]
 ```
 FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl apply -f %i
 ```
