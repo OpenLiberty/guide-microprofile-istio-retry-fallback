@@ -307,9 +307,9 @@ deployment.apps/system-deployment created
 deployment.apps/inventory-deployment created
 ----
 
-The `traffic.yaml` file contains two virtual services. A virtual service defines how requests are routed to your applications.
+The [hotspot file=1]`traffic.yaml` file contains two virtual services. A virtual service defines how requests are routed to your applications.
 
-Deploy the resources defined in the `traffic.yaml` file:
+Deploy the resources defined in the [hotspot file=1]`traffic.yaml` file:
 
 [role=command]
 ```
@@ -356,9 +356,15 @@ To ensure that the gateway routes your requests appropriately, ensure that the `
 You can set the `Host` header with the `-H` option of the `curl` command.
 
 services.yaml
-[source, yaml, linenums, role='code_column']
+[source, yaml, linenums, role='code_column hide_tags=invConfig,configHide']
 ----
 include::finish/services.yaml[]
+----
+
+traffic.yaml
+[source, yaml, linenums, role='code_column hide_tags=istioRetry']
+----
+include::finish/traffic.yaml[]
 ----
 
 Make a request to the service by using `curl`:
@@ -777,7 +783,7 @@ As mentioned before, Istio does not offer any fallback capabilities, so the Micr
 The `@Fallback` annotation dictates a method to call when the original method encounters a failed execution. 
 If your microservices have a Retry policy specified, then the fallback occurs after all of the retries have failed. 
 
-[role="code_command hotspot", subs="quotes"]
+[role="code_command hotspot file=1", subs="quotes"]
 ----
 #Update the `InventoryResource.java` file.#
 `inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java`
