@@ -17,7 +17,7 @@
 :page-tags: ['MicroProfile', 'Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
-:common-includes: ../guides-common/
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :page-seo-title: Building resilient microservices using MicroProfile and Istio Fault Tolerance
 :page-seo-description: A tutorial on MicroProfile Fault Tolerance integrated with Istio Fault Tolerance and an example on how to develop fault-tolerance microservices using Istio's Retry policy and MicroProfile Fault Tolerance's Fallback mechanism.
