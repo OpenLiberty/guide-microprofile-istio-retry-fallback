@@ -216,9 +216,9 @@ include::finish/inventory/src/main/liberty/config/server.xml[]
 ----
 
 InventoryResource.java
-[source, Java, linenums, role='code_column hide_tags=copyright,mpRetry,fallback,fallbackMethod']
+[source, Java, linenums, role='code_column']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[][tags=**;!copyright,mpRetry,fallback,fallbackMethod;]
 ----
 
 === Adding the MicroProfile @Retry annotation
@@ -239,9 +239,9 @@ To retry the service request a maximum of 3 times, only when a [hotspot=webAppli
 add the [hotspot=mpRetry file=0]`@Retry` annotation before the [hotspot=getPropertiesForHost file=0]`getPropertiesForHost()` method.
 
 InventoryResource.java
-[source, Java, linenums, role='code_column hide_tags=copyright,fallback,fallbackMethod']
+[source, Java, linenums, role='code_column']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[][tags=**;!copyright,fallback,fallbackMethod;]
 ----
 
 
@@ -356,15 +356,15 @@ To ensure that the gateway routes your requests appropriately, ensure that the `
 You can set the `Host` header with the `-H` option of the `curl` command.
 
 services.yaml
-[source, yaml, linenums, role='code_column hide_tags=invConfig,configHide']
+[source, yaml, linenums, role='code_column']
 ----
-include::finish/services.yaml[]
+include::finish/services.yaml[][tags=**;!invConfig,configHide;]
 ----
 
 traffic.yaml
-[source, yaml, linenums, role='code_column hide_tags=istioRetry']
+[source, yaml, linenums, role='code_column']
 ----
-include::finish/traffic.yaml[]
+include::finish/traffic.yaml[][tags=**;!istioRetry;]
 ----
 
 Make a request to the service by using `curl`:
@@ -789,9 +789,9 @@ If your microservices have a Retry policy specified, then the fallback occurs af
 `inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java`
 ----
 InventoryResource.java
-[source, Java, linenums, role='code_column hide_tags=copyright']
+[source, Java, linenums, role='code_column']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[][tags=**;!copyright;]
 ----
 [role="edit_command_text"]
 Create the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method. 
