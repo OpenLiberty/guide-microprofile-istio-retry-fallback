@@ -358,13 +358,13 @@ You can set the `Host` header with the `-H` option of the `curl` command.
 services.yaml
 [source, yaml, linenums, role='code_column']
 ----
-include::finish/services.yaml[][tags=**;!invConfig,configHide;]
+include::finish/services.yaml[tags=**;!invConfig,configHide;]
 ----
 
 traffic.yaml
 [source, yaml, linenums, role='code_column']
 ----
-include::finish/traffic.yaml[][tags=**;!istioRetry;]
+include::finish/traffic.yaml[tags=**;!istioRetry;]
 ----
 
 Make a request to the service by using `curl`:
@@ -791,7 +791,7 @@ If your microservices have a Retry policy specified, then the fallback occurs af
 InventoryResource.java
 [source, Java, linenums, role='code_column']
 ----
-include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[][tags=**;!copyright;]
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[tags=**;!copyright;]
 ----
 [role="edit_command_text"]
 Create the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method. 
