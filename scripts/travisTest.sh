@@ -9,12 +9,7 @@ set -euxo pipefail
 
 kubectl get nodes
 
-ISTIO_LATEST=`curl -L -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.tag_name'`
-
-if [ $ISTIO_LATEST == "null" ]
-    then
-        ISTIO_LATEST=1.2.5
-fi
+ISTIO_LATEST=1.2.5
 
 curl -L https://github.com/istio/istio/releases/download/$ISTIO_LATEST/istio-$ISTIO_LATEST-linux.tar.gz | tar xzvf -
 
@@ -30,7 +25,7 @@ kubectl get deployments -n istio-system
 
 kubectl label namespace default istio-injection=enabled
 
-cd ..
+cd ../finish
 
 mvn -q package
 
