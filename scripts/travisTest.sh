@@ -39,7 +39,7 @@ sleep 10
 kubectl apply -f services.yaml
 kubectl apply -f traffic.yaml
 
-sleep 50
+sleep 60
 
 kubectl get pods
 
@@ -49,7 +49,7 @@ SYSTEM=`kubectl get pods | grep system | sed 's/ .*//'`
 
 kubectl exec -it $SYSTEM /opt/ol/wlp/bin/server pause
 
-sleep 20
+sleep 30
 
 echo `minikube ip`
 
