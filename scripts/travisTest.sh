@@ -25,7 +25,7 @@ kubectl get deployments -n istio-system
 
 kubectl label namespace default istio-injection=enabled
 
-cd ../finish
+cd ..
 
 mvn -q package
 
