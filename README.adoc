@@ -548,16 +548,16 @@ traffic.yaml
 include::finish/traffic.yaml[]
 ----
 [role="edit_command_text"]
-Add the [hotspot=istioRetry file=0]`retries` field under the [hotspot=route file=0]`route` specification in the [hotspot file=0]`traffic.yaml` file. 
+Add the [hotspot=32-35 file=0]`retries` field under the [hotspot=27-34 file=0]`route` specification in the [hotspot file=0]`traffic.yaml` file. 
 This tells Istio to retry requests a maximum of 4 times when the request returns any `5xx` response code. 
 
-The [hotspot=attempts file=0]`attempts` field is required in the configuration of the 
+The [hotspot=33 file=0]`attempts` field is required in the configuration of the 
 https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service/#HTTPRetry[Istio Retry^] policy. This field specifies the
 maximum number of retries that will be attempted for a given request. To retry a request on specific conditions, use the
-[hotspot=retryOn file=0]`retryOn` field. Since your paused `system` service responds with a `503` response code, 
-you set [hotspot=retryOn file=0]`retryOn` to be `5xx`. 
+[hotspot=34 file=0]`retryOn` field. Since your paused `system` service responds with a `503` response code, 
+you set [hotspot=34 file=0]`retryOn` to be `5xx`. 
 Other https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on[retry conditions^] 
-can also be specified in [hotspot=retryOn file=0]`retryOn`. Optionally, the `perTryTimeout` field can be added to Istio's Retry policy 
+can also be specified in [hotspot=34 file=0]`retryOn`. Optionally, the `perTryTimeout` field can be added to Istio's Retry policy 
 to specify the amount of time that is allocated to each retry attempt. 
 
 After you configure the number of retries that Istio performs, deploy your microservices again: 
@@ -676,12 +676,12 @@ services.yaml
 include::finish/services.yaml[]
 ----
 [role="edit_command_text"]
-Add a [hotspot=configMap file=0]`ConfigMap` into the [hotspot file=0]`services.yaml` file, and 
-set the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property to false. 
+Add a [hotspot=95-102 file=0]`ConfigMap` into the [hotspot file=0]`services.yaml` file, and 
+set the [hotspot=102 file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property to false. 
 Add the [hotspot=invConfig file=0]`envFrom` field 
-to inject the [hotspot=configMap file=0]`ConfigMap` with the [hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` property into your pods. 
+to inject the [hotspot=95-102 file=0]`ConfigMap` with the [hotspot=102 file=0]`MP_Fault_Tolerance_NonFallback_Enabled` property into your pods. 
 
-The [hotspot=configName file=0]`name` of the [hotspot=configMap file=0]`ConfigMap`, which is [hotspot=configName file=0]`inventory-config`, 
+The [hotspot=configName file=0]`name` of the [hotspot=95-102 file=0]`ConfigMap`, which is [hotspot=configName file=0]`inventory-config`, 
 becomes the environment variable [hotspot=configName2 file=0]`name` that is specified in the [hotspot=invConfig file=0]`envFrom` field. 
 
 Deploy your microservices again to turn off all MicroProfile Fault Tolerance capabilities, except fallback:
@@ -777,7 +777,7 @@ Since retrying the requests to the `system` service still does not succeed, you 
 You will create a fallback method as an alternative solution for when retry requests to the `system` service have failed.
 
 Although you disabled MicroProfile `@Retry` and other MicroProfile Fault Tolerance policies using the 
-[hotspot=nonFallback file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property, the fallback policy is still available.
+[hotspot=102 file=0]`MP_Fault_Tolerance_NonFallback_Enabled` config property, the fallback policy is still available.
 As mentioned before, Istio does not offer any fallback capabilities, so the MicroProfile Fallback capability can be used to complement it.
 
 The `@Fallback` annotation dictates a method to call when the original method encounters a failed execution. 
