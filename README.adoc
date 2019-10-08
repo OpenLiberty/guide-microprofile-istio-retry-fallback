@@ -548,16 +548,16 @@ traffic.yaml
 include::finish/traffic.yaml[]
 ----
 [role="edit_command_text"]
-Add the [hotspot=32-35 file=0]`retries` field under the [hotspot=27-34 file=0]`route` specification in the [hotspot file=0]`traffic.yaml` file. 
+Add the [hotspot=istioRetry file=0]`retries` field under the [hotspot=27-35 file=0]`route` specification in the [hotspot file=0]`traffic.yaml` file. 
 This tells Istio to retry requests a maximum of 4 times when the request returns any `5xx` response code. 
 
-The [hotspot=33 file=0]`attempts` field is required in the configuration of the 
+The [hotspot=34 file=0]`attempts` field is required in the configuration of the 
 https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service/#HTTPRetry[Istio Retry^] policy. This field specifies the
 maximum number of retries that will be attempted for a given request. To retry a request on specific conditions, use the
-[hotspot=34 file=0]`retryOn` field. Since your paused `system` service responds with a `503` response code, 
-you set [hotspot=34 file=0]`retryOn` to be `5xx`. 
+[hotspot=35 file=0]`retryOn` field. Since your paused `system` service responds with a `503` response code, 
+you set [hotspot=35 file=0]`retryOn` to be `5xx`. 
 Other https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on[retry conditions^] 
-can also be specified in [hotspot=34 file=0]`retryOn`. Optionally, the `perTryTimeout` field can be added to Istio's Retry policy 
+can also be specified in [hotspot=35 file=0]`retryOn`. Optionally, the `perTryTimeout` field can be added to Istio's Retry policy 
 to specify the amount of time that is allocated to each retry attempt. 
 
 After you configure the number of retries that Istio performs, deploy your microservices again: 
