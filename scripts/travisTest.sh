@@ -39,7 +39,7 @@ sleep 10
 kubectl apply -f services.yaml
 kubectl apply -f traffic.yaml
 
-sleep 60
+sleep 120
 
 kubectl get pods
 
