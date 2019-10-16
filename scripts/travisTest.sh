@@ -39,7 +39,7 @@ sleep 10
 kubectl apply -f services.yaml
 kubectl apply -f traffic.yaml
 
-sleep 120 
+sleep 180 
 
 kubectl get pods
 
@@ -60,7 +60,7 @@ if [ $? -ne 0 ]
         exit 1
 fi
 
-sleep 20
+sleep 30
 
 COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
 
