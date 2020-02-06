@@ -6,9 +6,9 @@
     <feature>mpRestClient-1.3</feature>
     <feature>mpConfig-1.3</feature>
     <feature>jsonp-1.1</feature>
-    <!-- tag::mpFaultTolerance2[] -->
+    <!-- tag::mpFaultTolerance[] -->
     <feature>mpFaultTolerance-2.0</feature>
-    <!-- end::mpFaultTolerance2[] -->
+    <!-- end::mpFaultTolerance[] -->
   </featureManager>
 
   <httpEndpoint host="*" httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>
