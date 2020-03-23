@@ -191,7 +191,7 @@ automatically injected into your pods when you deploy your application.
 
 Navigate to the `start` directory to begin.
 
-The MicroProfile Fault Tolerance API is added as a [hotspot=mpFaultTolerance file=0]`feature` in the inventory [hotspot file=0]`server.xml` file.
+The MicroProfile Fault Tolerance API is added as a [hotspot=mpFaultTolerance file=0]`feature` in the inventory `server.xml` file.
 Adding this feature turns on MicroProfile Fault Tolerance capabilities in Open Liberty, which allows you to use the fault tolerance policies in your microservices.
 
 The [hotspot file=1]`InventoryResource.java` file
