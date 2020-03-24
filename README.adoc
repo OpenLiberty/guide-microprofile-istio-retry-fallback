@@ -794,6 +794,21 @@ The [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method, which is th
 [hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method, prints out a warning message in the browser that says 
 the `system` service may not be running.
 
+Before rebuilding your application, update the version of the microservices to `2.0-SNAPSHOT`:
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Update the `pom.xml` file.#
+`inventory/pom.xml`
+----
+pom.xml
+[source, xml, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/inventory/pom.xml[]
+----
+[role="edit_command_text"]
+Update the `inventory` service's [hotspot=version file=2]`version` from `1.0-SNAPSHOT` to `2.0-SNAPSHOT`.
+
+
 Rebuild your application to add fallback behaviour to your microservices:
 
 [role=command]
@@ -805,9 +820,24 @@ Next, run the `docker build` commands to rebuild the container images for your a
 
 [role='command']
 ```
-docker build -t system:1.0-SNAPSHOT system/.
-docker build -t inventory:1.0-SNAPSHOT inventory/.
+docker build -t inventory:2.0-SNAPSHOT inventory/.
 ```
+
+Before redeploying your microservices, you must update your `inventory` microservice's deployment manifest in `services.yaml`
+to use the new image.
+[role="code_command hotspot file=3", subs="quotes"]
+----
+#Update the `services.yaml` file.#
+`services.yaml`
+----
+services.yaml
+[source, yaml, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/services.yaml[]
+----
+[role="edit_command_text"]
+Update the `inventory-deployment` deployment's [hotspot=version file=2]`image` from `1.0-SNAPSHOT` to `2.0-SNAPSHOT`.
+
 
 Deploy your microservices again to turn off all MicroProfile Fault Tolerance capabilities, except fallback:
 

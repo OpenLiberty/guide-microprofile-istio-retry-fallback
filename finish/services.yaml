@@ -80,7 +80,9 @@ spec:
     spec:
       containers:
       - name: inventory-container
-        image: inventory:1.0-SNAPSHOT
+        # tag::invImage[]
+        image: inventory:2.0-SNAPSHOT
+        # end::invImage[]
         ports:
         - containerPort: 9081
         # tag::invConfig[]
