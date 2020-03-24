@@ -29,6 +29,7 @@
 
     <dependencies>
         <!-- Provided dependencies -->
+        <!-- tag::microprofile[] -->
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>
@@ -36,6 +37,7 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
+        <!-- end::microprofile[] -->
     </dependencies>
 
     <build>

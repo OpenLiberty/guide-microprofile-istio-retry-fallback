@@ -191,18 +191,19 @@ automatically injected into your pods when you deploy your application.
 
 Navigate to the `start` directory to begin.
 
-The MicroProfile Fault Tolerance API is added as a [hotspot=mpFaultTolerance file=0]`feature` in the inventory `server.xml` file.
-Adding this feature turns on MicroProfile Fault Tolerance capabilities in Open Liberty, which allows you to use the fault tolerance policies in your microservices.
+The MicroProfile Fault Tolerance API is included in the MicroProfile dependency that is specified in your `pom.xml` file.
+Look for the dependency with the [hotspot=microprofile file=0]`microprofile` artifact ID.
+This dependency provides a library that allows you to use the fault tolerance policies in your microservices.
 
 The [hotspot file=1]`InventoryResource.java` file
 makes a request to the `system` service through the MicroProfile Rest Client API.
 If you want to learn more about MicroProfile Rest Client,
 you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide.
 
-server.xml
+pom.xml
 [source, xml, linenums, role='code_column']
 ----
-include::finish/inventory/src/main/liberty/config/server.xml[]
+include::finish/inventory/pom.xml[]
 ----
 
 InventoryResource.java
