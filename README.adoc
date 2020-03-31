@@ -792,7 +792,7 @@ to call the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method when
 
 The [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method, which is the designated fallback method for the original 
 [hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method, prints out a warning message in the browser that says 
-the `system` service may not be running
+the `system` service may not be running.
 
 
 Rebuild your application to add fallback behaviour to your microservices:
