@@ -27,7 +27,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @RegisterProvider(UnknownUrlExceptionMapper.class)
 @Path("/properties")
 public interface SystemClient  {
-	  @GET
-	  @Produces(MediaType.APPLICATION_JSON)
-	  public Properties getProperties() throws UnknownUrlException, ProcessingException;
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Properties getProperties() throws UnknownUrlException, ProcessingException;
 }
