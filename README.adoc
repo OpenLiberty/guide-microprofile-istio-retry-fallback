@@ -191,14 +191,11 @@ automatically injected into your pods when you deploy your application.
 
 Navigate to the `start` directory to begin.
 
-The MicroProfile Fault Tolerance API was added as a dependency to your `inventory` service's [hotspot file=0]`pom.xml` file. Look for
-the dependency with the [hotspot=mpFaultTolerance file=0]`mpFaultTolerance` artifact ID. Adding this dependency allows you to use the
-fault tolerance policies in your microservices.
+The MicroProfile Fault Tolerance API is included in the MicroProfile dependency that is specified in your `pom.xml` file.
+Look for the dependency with the [hotspot=microprofile file=0]`microprofile` artifact ID.
+This dependency provides a library that allows you to use the fault tolerance policies in your microservices.
 
-You can also find the [hotspot=mpFaultTolerance2 file=1]`mpFaultTolerance` feature in your inventory [hotspot file=1]`server.xml` server configuration,
-which turns on MicroProfile Fault Tolerance capabilities in Open Liberty.
-
-The [hotspot file=2]`InventoryResource.java` file
+The [hotspot file=1]`InventoryResource.java` file
 makes a request to the `system` service through the MicroProfile Rest Client API.
 If you want to learn more about MicroProfile Rest Client,
 you can follow the https://openliberty.io/guides/microprofile-rest-client.html[Consuming RESTful services with template interfaces^] guide.
@@ -207,12 +204,6 @@ pom.xml
 [source, xml, linenums, role='code_column']
 ----
 include::finish/inventory/pom.xml[]
-----
-
-server.xml
-[source, xml, linenums, role='code_column']
-----
-include::finish/inventory/src/main/liberty/config/server.xml[]
 ----
 
 InventoryResource.java
@@ -803,6 +794,7 @@ The [hotspot=fallbackMethod file=1]`getPropertiesFallback()` method, which is th
 [hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method, prints out a warning message in the browser that says 
 the `system` service may not be running.
 
+
 Rebuild your application to add fallback behaviour to your microservices:
 
 [role=command]
@@ -814,9 +806,10 @@ Next, run the `docker build` commands to rebuild the container images for your a
 
 [role='command']
 ```
-docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
+docker build -t system:1.0-SNAPSHOT system/.
 ```
+
 
 Deploy your microservices again to turn off all MicroProfile Fault Tolerance capabilities, except fallback:
 
