@@ -45,6 +45,8 @@ kubectl get pods
 
 kubectl get deployments
 
+kubectl get all -n istio-system
+
 SYSTEM=`kubectl get pods | grep system | sed 's/ .*//'`
 
 kubectl exec -it $SYSTEM /opt/ol/wlp/bin/server pause
@@ -53,7 +55,7 @@ sleep 60
 
 echo `minikube ip`
 
-curl -H Host:inventory.example.com http://`minikube ip`/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
 
 if [ $? -ne 0 ]
     then
