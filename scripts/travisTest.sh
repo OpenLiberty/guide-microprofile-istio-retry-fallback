@@ -29,7 +29,7 @@ cd ..
 
 mvn -q package
 
-docker pull open-liberty
+docker pull openliberty/open-liberty:kernel-java8-openj9-ubi
 
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
@@ -53,7 +53,7 @@ sleep 60
 
 echo `minikube ip`
 
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`/inventory/systems/system-service -I
 
 if [ $? -ne 0 ]
     then
