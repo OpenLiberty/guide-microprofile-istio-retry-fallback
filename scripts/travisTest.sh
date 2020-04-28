@@ -29,7 +29,7 @@ cd ..
 
 mvn -q package
 
-docker pull open-liberty
+docker pull openliberty/open-liberty:kernel-java8-openj9-ubi
 
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
@@ -44,6 +44,8 @@ sleep 180
 kubectl get pods
 
 kubectl get deployments
+
+kubectl get all -n istio-system
 
 SYSTEM=`kubectl get pods | grep system | sed 's/ .*//'`
 
