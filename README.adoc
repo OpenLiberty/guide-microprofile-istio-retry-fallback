@@ -253,7 +253,6 @@ Navigate to the `start` directory and run the following command to build your ap
 mvn package
 ```
 
-[role='command']
 include::{common-includes}/ol-kernel-docker-pull.adoc[]
 
 Next, run the `docker build` commands to build container images for your application:
