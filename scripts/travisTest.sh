@@ -23,7 +23,7 @@ sleep 240
 
 kubectl get deployments -n istio-system
 
-kubectl label namespace default istio-injection=enabled
+kubectl label --overwrite namespace default istio-injection=enabled
 
 cd ..
 
