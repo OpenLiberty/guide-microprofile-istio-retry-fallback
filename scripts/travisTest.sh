@@ -68,7 +68,7 @@ COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
 
 echo $COUNT
 
-if [ $COUNT -ne 3 ]
+if [ $COUNT -ne 6 ]
     then
         exit 1
 fi
