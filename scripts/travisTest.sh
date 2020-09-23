@@ -66,7 +66,9 @@ sleep 30
 
 COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
 
-echo $COUNT
+echo COUNT=$COUNT
+
+kubectl logs $SYSTEM
 
 if [ $COUNT -lt 3 ]
     then
