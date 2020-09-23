@@ -68,7 +68,8 @@ COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
 
 echo COUNT=$COUNT
 
-kubectl exec $SYSTEM -c istio-proxy -- ls -Rl /output
+kubectl exec $SYSTEM -- ls -Rl /logs
+kubectl exec $SYSTEM -- ls -Rl /output
 
 if [ $COUNT -lt 3 ]
     then
