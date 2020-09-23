@@ -68,7 +68,8 @@ COUNT=`kubectl logs $SYSTEM -c istio-proxy | grep -c system-service:9080`
 
 echo COUNT=$COUNT
 
-kubectl logs $SYSTEM
+POD_NAME=$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
+kubectl logs $POD_NAME
 
 if [ $COUNT -lt 3 ]
     then
