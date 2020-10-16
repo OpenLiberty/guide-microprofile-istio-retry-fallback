@@ -111,37 +111,62 @@ include::{common-includes}/gitclone.adoc[]
 [role=command]
 include::{common-includes}/kube-start.adoc[]
 
+// =================================================================================================
+// Deploying Istio
+// =================================================================================================
+
 == Deploying Istio
 
-First, go to the https://github.com/istio/istio/releases/latest[{istio} release page^] and download the latest stable release. Extract the archive and navigate to the directory with the extracted files.
-
-Next, deploy the {istio} custom resource definitions. Custom resource definitions allow {istio} to define custom {kube} resources that you can use in your resource definition files.
+First, go to the https://github.com/istio/istio/releases/latest[{istio} release page^] and download the latest stable release. Extract the archive and navigate to the directory with the extracted files. Add `istioctl` client to your path by running the following:
 
 include::{common-includes}/os-tabs.adoc[]
-
-[.tab_content.mac_section.linux_section]
---
-[role=command]
-```
-for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
-```
---
 
 [.tab_content.windows_section]
 --
 [role=command]
 ```
-FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl apply -f %i
+cd bin
+setx /m istioctl "${pwd}"
 ```
 --
 
-Next, deploy {istio} resources to your cluster by running the `kubectl apply` command, which creates or updates
-{kube} resources defined in a yaml file.
+[.tab_content.mac_section.linux_section]
+--
+[role=command]
+```
+export PATH=$PWD/bin:$PATH
+```
+--
+
+Run the following command to verify that `istioctl` path has been set successfully:
 
 [role=command]
 ```
-kubectl apply -f install/kubernetes/istio-demo.yaml
+istioctl version
 ```
+
+The output will be similar to the following example.
+[source, role="no_copy"]
+----
+no running Istio pods in "istio-system"
+1.7.3
+----
+
+We will use the following command to configure the {istio} profile on {kube}
+[role=command]
+```
+istioctl install --set profile=demo
+```
+
+The following output should appear when the installation is complete:
+[source, role="no_copy"]
+----
+✔ Istio core installed
+✔ Istiod installed
+✔ Egress gateways installed
+✔ Ingress gateways installed
+✔ Installation complete
+----
 
 Verify that Istio was successfully deployed by running the following command:
 
@@ -150,28 +175,18 @@ Verify that Istio was successfully deployed by running the following command:
 kubectl get deployments -n istio-system
 ```
 
-After the deployment is complete, all the values in the `AVAILABLE` column will have a value of 1.
+All the values in the `AVAILABLE` column will have a value of `1` after
+the deployment is complete.
 
 [source, role="no_copy"]
 ----
 NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
-grafana                  1/1     1            1           2m48s
-istio-citadel            1/1     1            1           2m48s
 istio-egressgateway      1/1     1            1           2m48s
-istio-galley             1/1     1            1           2m48s
 istio-ingressgateway     1/1     1            1           2m48s
-istio-pilot              1/1     1            1           2m48s
-istio-policy             1/1     1            1           2m48s
-istio-sidecar-injector   1/1     1            1           2m48s
-istio-telemetry          1/1     1            1           2m48s
-istio-tracing            1/1     1            1           2m48s
-kiali                    1/1     1            1           2m48s
-prometheus               1/1     1            1           2m48s
+istiod                   1/1     1            1           2m48s
 ----
  
-Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. 
-If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. 
-On Docker Desktop, you can increase the memory from your {docker} preferences. On {minikube}, you can increase the memory using the `--memory` flag.
+Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. On Docker Desktop, you can increase the memory from your {docker} preferences. On {minikube}, you can increase the memory using the `--memory` flag.
 
 Finally, create the `istio-injection` label and set its value to `enabled`.
 
@@ -180,8 +195,8 @@ Finally, create the `istio-injection` label and set its value to `enabled`.
 kubectl label namespace default istio-injection=enabled
 ```
 
-Adding this label enables automatic {istio} sidecar injection. Automatic injection means that sidecars are
-automatically injected into your pods when you deploy your application.
+Adding this label enables automatic {istio} sidecar injection. Automatic injection means that sidecars will
+automatically be injected into your pods when you deploy your application.
 
 // =================================================================================================
 // Enabling MicroProfile Fault Tolerance
