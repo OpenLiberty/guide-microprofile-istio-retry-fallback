@@ -438,7 +438,7 @@ Remember to replace `[system-pod-name]` with the pod name that is associated wit
 
 [role=command]
 ```
-kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause -c system-container
+kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-container
 ```
 
 You will see the following output:
@@ -568,7 +568,7 @@ Pause the `system` service pod to simulate that the service is unavailable.
 
 [role=command]
 ```
-kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause -c system-container
+kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-container
 ```
 
 Make a request to the service by using `curl`:
@@ -690,7 +690,7 @@ Pause the `system` service pod to simulate that the service is unavailable:
 
 [role=command]
 ```
-kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause -c system-container
+kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-container
 ```
 
 Make a request to the service by using `curl`:
@@ -827,7 +827,7 @@ Pause the `system` service pod to simulate that the service is unavailable:
 
 [role=command]
 ```
-kubectl exec -it [system-pod-name] /opt/ol/wlp/bin/server pause -c system-container
+kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-container
 ```
 
 Make a request to the service by using `curl`:
