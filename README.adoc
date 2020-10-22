@@ -105,7 +105,7 @@ include::{common-includes}/gitclone.adoc[]
 // Preparing your cluster and deploying Istio
 // =================================================================================================
 
-:minikube-start: minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.13.0
+:minikube-start: minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.19.0
 :docker-desktop-description: Ensure that you have enough memory allocated to your Docker Desktop enviornment. 8GB is recommended but 4GB should be adequate if you don't have enough RAM.
 :minikube-description: The memory flag allocates 8GB of memory to your Minikube cluster. If you don't have enough RAM, then 4GB should be adequate.
 [role=command]
@@ -931,7 +931,7 @@ Navigate to the directory where you extracted {istio} and delete the {istio} res
 kubectl delete -f install/kubernetes/istio-demo.yaml
 ```
 
-Next, delete the Istio custom resource definitions by running the following command:
+Delete all {istio} resources from the cluster:
 
 include::{common-includes}/os-tabs.adoc[]
 
@@ -939,7 +939,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl delete -f %i
+istioctl x uninstall --purge
 ```
 --
 
@@ -947,7 +947,7 @@ FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl delete 
 --
 [role=command]
 ```
-for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f $i; done
+istioctl x uninstall --purge
 ```
 --
 
@@ -955,7 +955,7 @@ for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f
 --
 [role=command]
 ```
-for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f $i; done
+istioctl x uninstall --purge
 ```
 Perform the following steps to return your environment to a clean state.
 
