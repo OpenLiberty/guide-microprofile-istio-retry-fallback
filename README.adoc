@@ -133,7 +133,7 @@ no running Istio pods in "istio-system"
 1.7.3
 ----
 
-We will use the following command to configure the {istio} profile on {kube}
+Use the following command to configure the {istio} profile on {kube}
 [role=command]
 ```
 istioctl install --set profile=demo
@@ -185,7 +185,7 @@ automatically be injected into your pods when you deploy your application.
 
 == Enabling MicroProfile Fault Tolerance
 
-Navigate to the `start` directory to begin.
+Navigate to the `guide-{projectid}\start` directory to begin.
 
 The MicroProfile Fault Tolerance API is included in the MicroProfile dependency that is specified in your `pom.xml` file.
 Look for the dependency with the [hotspot=microprofile file=0]`microprofile` artifact ID.
@@ -439,7 +439,7 @@ kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-con
 
 You will see the following output:
 
-[source, role="no_copy"]
+U
 ----
 Pausing the defaultServer server.
 Pausing the defaultServer server completed.
