@@ -123,7 +123,7 @@ include::{common-includes}/istio-start.adoc[]
 
 == Enabling MicroProfile Fault Tolerance
 
-Navigate to the `guide-{projectid}\start` directory to begin.
+Navigate to the `guide-{projectid}/start` directory to begin.
 
 The MicroProfile Fault Tolerance API is included in the MicroProfile dependency that is specified in your `pom.xml` file.
 Look for the dependency with the [hotspot=microprofile file=0]`microprofile` artifact ID.
@@ -180,7 +180,7 @@ The integer value must be greater than or equal to -1. A value of -1 indicates t
 
 === Building and running the application
 
-Navigate to the `guide-{projectid}\start` directory and run the following command to build your application and integrate the Retry policy into your microservices:
+Navigate to the `guide-{projectid}/start` directory and run the following command to build your application and integrate the Retry policy into your microservices:
 
 [role=command]
 ```
