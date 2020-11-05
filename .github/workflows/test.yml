@@ -32,6 +32,7 @@ jobs:
         sudo ln -s $(pwd)/kubectl /usr/local/bin/kubectl
         wget https://github.com/kubernetes/minikube/releases/download/v0.28.2/minikube-linux-amd64 -q -O minikube
         chmod +x minikube
+        CHANGE_MINIKUBE_NONE_USER=true
     - name: Install Conn Track & Jq
       run: |
         sudo apt-get update -y
@@ -40,7 +41,7 @@ jobs:
     - name: Start Minikube
       run: sudo minikube start --vm-driver=none --bootstrapper=kubeadm
     - name: Run tests
-      run: sudo ../scripts/travisTest.sh
+      run: chmod +x ../scripts/travisTest.sh && ../scripts/travisTest.sh
     - name: Post tests
       if: always()
       run: |
