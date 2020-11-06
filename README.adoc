@@ -1,7 +1,7 @@
 // INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
 // INSTRUCTION: The copyright statement must appear at the top of the file
 //
-// Copyright (c) 2019 IBM Corporation and others.
+// Copyright (c) 2019, 2020 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -105,83 +105,17 @@ include::{common-includes}/gitclone.adoc[]
 // Preparing your cluster and deploying Istio
 // =================================================================================================
 
-:minikube-start: minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.13.0
+:minikube-start: minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.19.0
 :docker-desktop-description: Ensure that you have enough memory allocated to your Docker Desktop enviornment. 8GB is recommended but 4GB should be adequate if you don't have enough RAM.
 :minikube-description: The memory flag allocates 8GB of memory to your Minikube cluster. If you don't have enough RAM, then 4GB should be adequate.
 [role=command]
 include::{common-includes}/kube-start.adoc[]
 
-== Deploying Istio
+// =================================================================================================
+// Deploying Istio
+// =================================================================================================
 
-First, go to the https://github.com/istio/istio/releases/latest[{istio} release page^] and download the latest stable release. Extract the archive and navigate to the directory with the extracted files.
-
-Next, deploy the {istio} custom resource definitions. Custom resource definitions allow {istio} to define custom {kube} resources that you can use in your resource definition files.
-
-include::{common-includes}/os-tabs.adoc[]
-
-[.tab_content.mac_section.linux_section]
---
-[role=command]
-```
-for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
-```
---
-
-[.tab_content.windows_section]
---
-[role=command]
-```
-FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl apply -f %i
-```
---
-
-Next, deploy {istio} resources to your cluster by running the `kubectl apply` command, which creates or updates
-{kube} resources defined in a yaml file.
-
-[role=command]
-```
-kubectl apply -f install/kubernetes/istio-demo.yaml
-```
-
-Verify that Istio was successfully deployed by running the following command:
-
-[role=command]
-```
-kubectl get deployments -n istio-system
-```
-
-After the deployment is complete, all the values in the `AVAILABLE` column will have a value of 1.
-
-[source, role="no_copy"]
-----
-NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
-grafana                  1/1     1            1           2m48s
-istio-citadel            1/1     1            1           2m48s
-istio-egressgateway      1/1     1            1           2m48s
-istio-galley             1/1     1            1           2m48s
-istio-ingressgateway     1/1     1            1           2m48s
-istio-pilot              1/1     1            1           2m48s
-istio-policy             1/1     1            1           2m48s
-istio-sidecar-injector   1/1     1            1           2m48s
-istio-telemetry          1/1     1            1           2m48s
-istio-tracing            1/1     1            1           2m48s
-kiali                    1/1     1            1           2m48s
-prometheus               1/1     1            1           2m48s
-----
- 
-Ensure that the {istio} deployments are all available before you continue. The deployments might take a few minutes to become available. 
-If the deployments aren't available after a few minutes, then increase the amount of memory available to your {kube} cluster. 
-On Docker Desktop, you can increase the memory from your {docker} preferences. On {minikube}, you can increase the memory using the `--memory` flag.
-
-Finally, create the `istio-injection` label and set its value to `enabled`.
-
-[role=command]
-```
-kubectl label namespace default istio-injection=enabled
-```
-
-Adding this label enables automatic {istio} sidecar injection. Automatic injection means that sidecars are
-automatically injected into your pods when you deploy your application.
+include::{common-includes}/istio-start.adoc[]
 
 // =================================================================================================
 // Enabling MicroProfile Fault Tolerance
@@ -189,7 +123,7 @@ automatically injected into your pods when you deploy your application.
 
 == Enabling MicroProfile Fault Tolerance
 
-Navigate to the `start` directory to begin.
+Navigate to the `guide-{projectid}/start` directory to begin.
 
 The MicroProfile Fault Tolerance API is included in the MicroProfile dependency that is specified in your `pom.xml` file.
 Look for the dependency with the [hotspot=microprofile file=0]`microprofile` artifact ID.
@@ -246,7 +180,7 @@ The integer value must be greater than or equal to -1. A value of -1 indicates t
 
 === Building and running the application
 
-Navigate to the `start` directory and run the following command to build your application and integrate the Retry policy into your microservices:
+Navigate to the `guide-{projectid}/start` directory and run the following command to build your application and integrate the Retry policy into your microservices:
 
 [role=command]
 ```
@@ -443,7 +377,6 @@ kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-con
 
 You will see the following output:
 
-[source, role="no_copy"]
 ----
 Pausing the defaultServer server.
 Pausing the defaultServer server completed.
@@ -935,7 +868,7 @@ Navigate to the directory where you extracted {istio} and delete the {istio} res
 kubectl delete -f install/kubernetes/istio-demo.yaml
 ```
 
-Next, delete the Istio custom resource definitions by running the following command:
+Delete all {istio} resources from the cluster:
 
 include::{common-includes}/os-tabs.adoc[]
 
@@ -943,7 +876,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl delete -f %i
+istioctl x uninstall --purge
 ```
 --
 
@@ -951,7 +884,7 @@ FOR %i in (install\kubernetes\helm\istio-init\files\crd*yaml) DO kubectl delete 
 --
 [role=command]
 ```
-for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f $i; done
+istioctl x uninstall --purge
 ```
 --
 
@@ -959,7 +892,7 @@ for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f
 --
 [role=command]
 ```
-for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f $i; done
+istioctl x uninstall --purge
 ```
 Perform the following steps to return your environment to a clean state.
 
