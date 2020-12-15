@@ -7,40 +7,9 @@ set -euxo pipefail
 ##
 ##############################################################################
 
-# Set up Minikube
-
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-chmod +x kubectl
-sudo ln -s -f $(pwd)/kubectl /usr/local/bin/kubectl
-wget https://github.com/kubernetes/minikube/releases/download/v0.28.2/minikube-linux-amd64 -q -O minikube
-chmod +x minikube
-
-sudo apt-get update -y
-sudo apt-get install -y conntrack
-
-sudo minikube start --vm-driver=none --bootstrapper=kubeadm
-
 # Test app
 
 kubectl get nodes
-
-ISTIO_LATEST=1.2.5
-
-curl -L https://github.com/istio/istio/releases/download/$ISTIO_LATEST/istio-$ISTIO_LATEST-linux.tar.gz | tar xzvf -
-
-cd istio-$ISTIO_LATEST
-
-for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
-
-kubectl apply -f install/kubernetes/istio-demo.yaml
-
-sleep 240
-
-kubectl get deployments -n istio-system
-
-kubectl label --overwrite namespace default istio-injection=enabled
-
-cd ..
 
 mvn -q package
 

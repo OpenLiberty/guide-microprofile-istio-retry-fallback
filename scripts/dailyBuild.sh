@@ -18,16 +18,11 @@ cat inventory/Dockerfile system/Dockerfile
 
 docker pull $DOCKER_USERNAME"/olguides:"$BUILD
 
-sudo ../scripts/testApp.sh
+sudo ../scripts/installIstio.sh
 
-kubectl delete -f services.yaml
-kubectl delete -f traffic.yaml
-kubectl label namespace default istio-injection-
-kubectl delete -f install/kubernetes/istio-demo.yaml
-istioctl x uninstall --purge
-eval $(minikube docker-env -u)
-minikube stop
-minikube delete
+sudo ../scripts/startMinikube.sh
+sudo ../scripts/testApp.sh
+sudo ../scripts/stopMinikube.sh
 
 echo "Testing daily Docker image"
 
@@ -37,4 +32,13 @@ cat system/Dockerfile inventory/Dockerfile
 
 docker pull "openliberty/daily:latest"
 
-../scripts/testApp.sh
+IMAGEBUILDLEVEL=$(docker inspect --format "{{ index .Config.Labels \"org.opencontainers.image.revision\"}}" openliberty/daily:latest)
+
+if [ $IMAGEBUILDLEVEL == $BUILD ] 
+then
+    sudo ../scripts/startMinikube.sh
+    sudo ../scripts/testApp.sh
+    sudo ../scripts/stopMinikube.sh
+else
+    echo "Image does not match input build level for testing"
+fi
