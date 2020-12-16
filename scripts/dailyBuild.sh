@@ -18,9 +18,8 @@ cat inventory/Dockerfile system/Dockerfile
 
 docker pull $DOCKER_USERNAME"/olguides:"$BUILD
 
-sudo ../scripts/installIstio.sh
-
 sudo ../scripts/startMinikube.sh
+sudo ../scripts/installIstio.sh
 sudo ../scripts/testApp.sh
 sudo ../scripts/stopMinikube.sh
 
@@ -37,6 +36,7 @@ IMAGEBUILDLEVEL=$(docker inspect --format "{{ index .Config.Labels \"org.opencon
 if [ $IMAGEBUILDLEVEL == $BUILD ] 
 then
     sudo ../scripts/startMinikube.sh
+    sudo ../scripts/installIstio.sh
     sudo ../scripts/testApp.sh
     sudo ../scripts/stopMinikube.sh
 else
