@@ -15,7 +15,6 @@ jobs:
     defaults:
       run:
         working-directory: finish
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK

@@ -1,3 +1,4 @@
+#!/bin/bash
 kubectl delete -f services.yaml
 kubectl delete -f traffic.yaml
 kubectl label namespace default istio-injection-
