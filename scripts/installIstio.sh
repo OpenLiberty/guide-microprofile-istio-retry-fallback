@@ -7,7 +7,7 @@ cd istio-$ISTIO_LATEST
 
 export PATH=$PWD/bin:$PATH
 
-istioctl install --set profile=demo
+istioctl install --set profile=demo -y
 
 echo "Installed Istio $(istioctl version)"
 
