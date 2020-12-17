@@ -18,7 +18,7 @@ cat inventory/Dockerfile system/Dockerfile
 
 docker pull $DOCKER_USERNAME"/olguides:"$BUILD
 
-sudo ../scripts/startMinikube.sh
-sudo ../scripts/installIstio.sh
-sudo ../scripts/testApp.sh
-sudo ../scripts/stopMinikube.sh
+. ../scripts/startMinikube.sh
+. ../scripts/installIstio.sh
+. ../scripts/testApp.sh
+. ../scripts/stopMinikube.sh

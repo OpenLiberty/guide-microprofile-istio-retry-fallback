@@ -5,5 +5,5 @@ kubectl label namespace default istio-injection-
 istioctl x uninstall --purge
 
 eval $(minikube docker-env -u)
-minikube stop
-minikube delete
+sudo minikube stop
+sudo minikube delete
