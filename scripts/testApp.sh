@@ -7,6 +7,10 @@ set -euxo pipefail
 ##
 ##############################################################################
 
+# Set up
+. ../scripts/startMinikube.sh
+. ../scripts/installIstio.sh
+
 # Test app
 
 kubectl get nodes
@@ -57,3 +61,7 @@ kubectl exec $SYSTEM -- cat /logs/messages.log | grep java
 if [ $COUNT -lt 3 ]; then
     exit 1
 fi
+
+# Teardown
+
+. ../scripts/stopMinikube.sh

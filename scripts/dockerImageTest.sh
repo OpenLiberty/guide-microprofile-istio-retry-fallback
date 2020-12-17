@@ -1,5 +1,5 @@
 #!/bin/bash
-while getopts t:d:b:u: flag; do
+while getopts t:d: flag; do
     case "${flag}" in
     t) DATE="${OPTARG}" ;;
     d) DRIVER="${OPTARG}" ;;
@@ -16,7 +16,4 @@ cat inventory/Dockerfile system/Dockerfile
 
 docker pull "openliberty/daily:latest"
 
-. ../scripts/startMinikube.sh
-. ../scripts/installIstio.sh
-. ../scripts/testApp.sh
-. ../scripts/stopMinikube.sh
+sudo ../scripts/testApp.sh

@@ -24,10 +24,7 @@ jobs:
       - run: unset _JAVA_OPTIONS
       - name: Run tests
         run: |
-          . ../scripts/startMinikube.sh
-          . ../scripts/installIstio.sh
-          . ../scripts/testApp.sh
-          . ../scripts/stopMinikube.sh
+          sudo ../scripts/testApp.sh
       - name: Post tests
         if: always()
         run: docker images
