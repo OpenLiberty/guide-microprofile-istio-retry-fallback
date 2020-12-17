@@ -41,9 +41,11 @@ kubectl exec -it $SYSTEM -- /opt/ol/wlp/bin/server pause
 
 sleep 60
 
-echo $(minikube ip)
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 
-curl -H Host:inventory.example.com http://$(minikube ip):31380/inventory/systems/system-service -I
+echo $(minikube ip):$INGRESS_PORT
+
+curl -H Host:inventory.example.com http://$(minikube ip):$INGRESS_PORT/inventory/systems/system-service -I
 
 if [ $? -ne 0 ]; then
     exit 1
