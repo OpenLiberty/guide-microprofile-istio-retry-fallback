@@ -27,6 +27,7 @@ jobs:
           sudo ../scripts/startMinikube.sh
           sudo ../scripts/installIstio.sh
           sudo ../scripts/testApp.sh
+          sudo ../scripts/stopMinikube.sh
       - name: Post tests
         if: always()
         run: docker images

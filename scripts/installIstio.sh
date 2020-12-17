@@ -5,6 +5,8 @@ curl -L https://github.com/istio/istio/releases/download/$ISTIO_LATEST/istio-$IS
 
 cd istio-$ISTIO_LATEST
 
+chmod +x bin/istioctl
+
 export PATH=$PWD/bin:$PATH
 
 istioctl install --set profile=demo -y
