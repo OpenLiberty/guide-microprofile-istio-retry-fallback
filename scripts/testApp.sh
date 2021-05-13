@@ -45,7 +45,7 @@ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -
 
 echo "$(minikube ip)":"$INGRESS_PORT"
 
-curl -H Host:inventory.example.com http://$(minikube ip):$INGRESS_PORT/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://"$(minikube ip)":"$INGRESS_PORT"/inventory/systems/system-service -I
 
 if [ $? -ne 0 ]; then
     exit 1
@@ -55,7 +55,7 @@ sleep 30
 
 COUNT=$(kubectl logs "$SYSTEM" -c istio-proxy | grep -c system-service:9080)
 
-echo COUNT=$COUNT
+echo COUNT="$COUNT"
 
 kubectl exec "$SYSTEM" -- cat /logs/messages.log | grep product
 kubectl exec "$SYSTEM" -- cat /logs/messages.log | grep java
