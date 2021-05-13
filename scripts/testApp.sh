@@ -8,8 +8,8 @@ set -euxo pipefail
 ##############################################################################
 
 # Set up
-. ../scripts/startMinikube.sh
-. ../scripts/installIstio.sh
+../scripts/startMinikube.sh
+../scripts/installIstio.sh
 
 # Test app
 
@@ -43,7 +43,7 @@ sleep 60
 
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 
-echo $(minikube ip):"$INGRESS_PORT"
+echo "$(minikube ip)":"$INGRESS_PORT"
 
 curl -H Host:inventory.example.com http://$(minikube ip):$INGRESS_PORT/inventory/systems/system-service -I
 
@@ -66,4 +66,4 @@ fi
 
 # Teardown
 
-. ../scripts/stopMinikube.sh
+../scripts/stopMinikube.sh
