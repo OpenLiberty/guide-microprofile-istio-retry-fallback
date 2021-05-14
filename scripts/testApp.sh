@@ -15,7 +15,10 @@ set -euxo pipefail
 
 kubectl get nodes
 
-mvn -q package
+mvn -Dhttp.keepAlive=false \
+    -Dmaven.wagon.http.pool=false \
+    -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+    -q package
 
 docker pull openliberty/open-liberty:full-java11-openj9-ubi
 
