@@ -49,9 +49,7 @@ INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonp
 
 echo "$(minikube ip)":"$INGRESS_PORT"
 
-curl -H Host:inventory.example.com http://"$(minikube ip)":"$INGRESS_PORT"/inventory/systems/system-service -I
-
-if mycmd; then
+if local RET = "$(curl -H Host:inventory.example.com http://"$(minikube ip)":"$INGRESS_PORT"/inventory/systems/system-service -I)"; then
     exit 1
 fi
 
