@@ -1,7 +1,7 @@
 // INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
 // INSTRUCTION: The copyright statement must appear at the top of the file
 //
-// Copyright (c) 2019, 2020 IBM Corporation and others.
+// Copyright (c) 2019, 2021 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -187,7 +187,7 @@ Navigate to the `guide-{projectid}/start` directory and run the following comman
 mvn package
 ```
 
-include::{common-includes}/ol-kernel-docker-pull.adoc[]
+include::{common-includes}/ol-full-docker-pull.adoc[]
 
 Next, run the `docker build` commands to build container images for your application:
 
@@ -372,7 +372,7 @@ Remember to replace `[system-pod-name]` with the pod name that is associated wit
 
 [role=command]
 ```
-kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-container
+kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause
 ```
 
 You will see the following output:
@@ -501,7 +501,7 @@ Pause the `system` service pod to simulate that the service is unavailable.
 
 [role=command]
 ```
-kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-container
+kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause
 ```
 
 Make a request to the service by using `curl`:
@@ -623,7 +623,7 @@ Pause the `system` service pod to simulate that the service is unavailable:
 
 [role=command]
 ```
-kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-container
+kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause
 ```
 
 Make a request to the service by using `curl`:
@@ -760,7 +760,7 @@ Pause the `system` service pod to simulate that the service is unavailable:
 
 [role=command]
 ```
-kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause -c system-container
+kubectl exec -it [system-pod-name] -- /opt/ol/wlp/bin/server pause
 ```
 
 Make a request to the service by using `curl`:
