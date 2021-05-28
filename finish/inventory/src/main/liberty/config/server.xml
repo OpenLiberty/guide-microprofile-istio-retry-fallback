@@ -3,11 +3,11 @@
   <featureManager>
     <feature>jaxrs-2.1</feature>
     <feature>cdi-2.0</feature>
-    <feature>mpRestClient-1.4</feature>
-    <feature>mpConfig-1.4</feature>
+    <feature>mpRestClient-2.0</feature>
+    <feature>mpConfig-2.0</feature>
     <feature>jsonp-1.1</feature>
     <!-- tag::mpFaultTolerance[] -->
-    <feature>mpFaultTolerance-2.1</feature>
+    <feature>mpFaultTolerance-3.0</feature>
     <!-- end::mpFaultTolerance[] -->
   </featureManager>
 
