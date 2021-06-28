@@ -17,7 +17,7 @@
 :page-tags: ['MicroProfile', 'Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
-:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :source-highlighter: prettify
 :page-seo-title: Building resilient Java microservices using Eclipse MicroProfile and Istio Fault Tolerance
 :page-seo-description: A tutorial on Eclipse MicroProfile Fault Tolerance integrated with Istio Fault Tolerance. Includes an example on how to develop fault-tolerant Java microservices using Istio's Retry policy and MicroProfile Fault Tolerance's Fallback mechanism.
