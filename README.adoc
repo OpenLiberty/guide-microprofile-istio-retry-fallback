@@ -99,7 +99,7 @@ include::{common-includes}/kube-prereq.adoc[]
 [role='command']
 include::{common-includes}/gitclone.adoc[]
 
-// no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
+// no "try what you'll build" section in this guide because it would be too long due to all setup the user will have to do.
 
 // =================================================================================================
 // Preparing your cluster and deploying Istio
@@ -187,7 +187,7 @@ Navigate to the `guide-{projectid}/start` directory and run the following comman
 mvn package
 ```
 
-include::{common-includes}/ol-full-docker-pull.adoc[]
+include::{common-includes}/ol-icr-full-docker-pull.adoc[]
 
 Next, run the `docker build` commands to build container images for your application:
 
@@ -448,7 +448,7 @@ You will see the following output:
 37
 ----
 
-The above command returns 37, since there was a total of 37 requests made to the `system` service.
+The above command returns 37, because there was a total of 37 requests made to the `system` service.
 By default, Istio will retry 2 times to resolve any issues with a `503` response code.
 Including the initial requests and the retries, the requests made by Istio are multiplied by the requests made by MicroProfile.
 Hence, the 3 requests from the `system` service, the 3 requests from the `inventory` service, and the 4 MicroProfile requests are multiplied together,
@@ -480,7 +480,7 @@ This tells Istio to retry requests a maximum of 4 times when the request returns
 The [hotspot=attempts file=0]`attempts` field is required in the configuration of the 
 https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service/#HTTPRetry[Istio Retry^] policy. This field specifies the
 maximum number of retries that will be attempted for a given request. To retry a request on specific conditions, use the
-[hotspot=retryOn file=0]`retryOn` field. Since your paused `system` service responds with a `503` response code, 
+[hotspot=retryOn file=0]`retryOn` field. Because your paused `system` service responds with a `503` response code, 
 you set [hotspot=retryOn file=0]`retryOn` to be `5xx`. 
 Other https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on[retry conditions^] 
 can also be specified in [hotspot=retryOn file=0]`retryOn`. Optionally, the `perTryTimeout` field can be added to Istio's Retry policy 
@@ -569,7 +569,7 @@ Next, you will disable some MicroProfile Fault Tolerance capabilities, so that y
 
 == Turning off MicroProfile Fault Tolerance
 
-When we have both MicroProfile and Istio Fault Tolerance capabilities enabled, there is a compounding effect that may be unexpected. 
+When both MicroProfile and Istio Fault Tolerance capabilities are enabled, there is a compounding effect that may be unexpected. 
 If both MicroProfile and Istio set their own Retry policies on a service,
 the maximum number of retries that occur is not equivalent to either of the number of retries specified in MicroProfile or Istio. 
 The number of retries set by MicroProfile and Istio are actually multiplied.
@@ -831,7 +831,7 @@ You will see the following output:
 ----
 
 The above command returns 3, indicating that a total of 3 requests are made to the `system` service.
-The Istio retries that you enabled on the `inventory` service are not performed, since the Fallback policy is enabled. 
+The Istio retries that you enabled on the `inventory` service are not performed, because the Fallback policy is enabled. 
 However, the 3 default requests by Istio on the server end are still performed. 
 Since all of these requests failed, the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` fallback method is called. 
 
