@@ -333,7 +333,7 @@ server: istio-envoy
 transfer-encoding: chunked
 ----
 
-Since the `system` service is available, the request to the service is successful and returns a `200` response code.
+Because the `system` service is available, the request to the service is successful and returns a `200` response code.
 
 To see the number of times that the `system` service was called, check the logs of the `system` pod by using the `kubectl logs` command.
 Replace `[system-pod-name]` with the pod name associated with
