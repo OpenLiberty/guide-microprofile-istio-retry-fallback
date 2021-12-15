@@ -418,7 +418,7 @@ x-envoy-upstream-service-time: 2929
 content-language: en-US
 ----
 
-Since the the `system` service is unavailable, the request returns a `503` response code.
+Because the the `system` service is unavailable, the request returns a `503` response code.
 However, the request retried several times, as specified by the MicroProfile `@Retry` annotation.
 
 See the number of times that the service was retried:
@@ -526,7 +526,7 @@ curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/
 ```
 --
 
-Since the `system` service is unavailable, the request still returns a `503` response code.
+Because the `system` service is unavailable, the request still returns a `503` response code.
 This time, however, Istio retried the request several more times before failing.
 
 See the number of times that the service was retried:
@@ -648,7 +648,7 @@ curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/
 ```
 --
 
-Since the `system` service is unavailable, the request still returns a `503` response code.
+Because the `system` service is unavailable, the request still returns a `503` response code.
 This time, however, the request was retried several times with Istio, without any retries from MicroProfile.
 
 See the number of times that the service was retried:
@@ -679,7 +679,7 @@ You will see the following output:
 ----
 
 The above command returns 15, indicating that a total of 15 requests are made to the `system` service.
-Since MicroProfile's Retry policy is disabled, only Istio's retries are performed.
+Because MicroProfile's Retry policy is disabled, only Istio's retries are performed.
 
 traffic.yaml
 [source, yaml, linenums, role='code_column']
@@ -833,7 +833,7 @@ You will see the following output:
 The above command returns 3, indicating that a total of 3 requests are made to the `system` service.
 The Istio retries that you enabled on the `inventory` service are not performed, because the Fallback policy is enabled. 
 However, the 3 default requests by Istio on the server end are still performed. 
-Since all of these requests failed, the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` fallback method is called. 
+Because all of these requests failed, the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` fallback method is called. 
 
 
 // =================================================================================================
