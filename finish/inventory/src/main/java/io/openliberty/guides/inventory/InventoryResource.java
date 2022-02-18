@@ -56,7 +56,7 @@ public class InventoryResource {
   @Fallback(fallbackMethod = "getPropertiesFallback")
   // end::fallback[]
   // tag::mpRetry[]
-  @Retry(maxRetries=3, retryOn=WebApplicationException.class)
+  @Retry(maxRetries = 3, retryOn = WebApplicationException.class)
   // end::mpRetry[]
   // tag::getPropertiesForHost[]
   public Response getPropertiesForHost(@PathParam("hostname") String hostname)
@@ -78,7 +78,8 @@ public class InventoryResource {
         props = systemClient.getProperties();
         // end::getProperties[]
     } catch (MalformedURLException e) {
-      System.err.println("The given URL is not formatted correctly: " + customURLString);
+      System.err.println("The given URL is not formatted correctly: "
+                         + customURLString);
     }
 
     if (props == null) {

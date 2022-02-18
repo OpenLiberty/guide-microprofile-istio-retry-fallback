@@ -30,6 +30,6 @@ public interface SystemClient  {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     // tag::exception[]
-    public Properties getProperties() throws UnknownUrlException, ProcessingException;
+    Properties getProperties() throws UnknownUrlException, ProcessingException;
     // end::exception[]
 }

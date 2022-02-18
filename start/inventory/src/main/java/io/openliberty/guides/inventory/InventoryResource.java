@@ -66,7 +66,8 @@ public class InventoryResource {
                 .build(SystemClient.class);
         props = systemClient.getProperties();
     } catch (MalformedURLException e) {
-      System.err.println("The given URL is not formatted correctly: " + customURLString);
+      System.err.println("The given URL is not formatted correctly: "
+                        + customURLString);
     }
 
     if (props == null) {
