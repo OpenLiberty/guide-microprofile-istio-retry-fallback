@@ -75,6 +75,6 @@ fi
 
 # Teardown
 
-../scripts/stopMinikube.sh
+#../scripts/stopMinikube.sh
 eval "$(minikube docker-env -u)"
 minikube stop
