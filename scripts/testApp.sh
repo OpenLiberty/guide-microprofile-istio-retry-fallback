@@ -22,7 +22,7 @@ eval "$(minikube docker-env)"
 
 kubectl get nodes
 
-mvn -Dhttp.keepAlive=false \
+mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -q package
