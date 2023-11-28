@@ -8,19 +8,26 @@ set -euxo pipefail
 ##############################################################################
 
 # Set up
-../scripts/startMinikube.sh
+#../scripts/startMinikube.sh
+minikube start
+minikube status
+#kubectl cluster-info
+#kubectl get services --all-namespaces
+#kubectl config view
+eval "$(minikube docker-env)"
+
 ../scripts/installIstio.sh
 
 # Test app
 
 kubectl get nodes
 
-mvn -Dhttp.keepAlive=false \
+mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -q package
 
-docker pull icr.io/appcafe/open-liberty:full-java11-openj9-ubi
+docker pull -q icr.io/appcafe/open-liberty:kernel-slim-java11-openj9-ubi
 
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
@@ -68,4 +75,6 @@ fi
 
 # Teardown
 
-../scripts/stopMinikube.sh
+#../scripts/stopMinikube.sh
+eval "$(minikube docker-env -u)"
+minikube stop

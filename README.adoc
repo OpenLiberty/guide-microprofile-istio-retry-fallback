@@ -1,7 +1,7 @@
 // INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
 // INSTRUCTION: The copyright statement must appear at the top of the file
 //
-// Copyright (c) 2019, 2022 IBM Corporation and others.
+// Copyright (c) 2019, 2023 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -187,7 +187,7 @@ Navigate to the `guide-{projectid}/start` directory and run the following comman
 mvn package
 ```
 
-include::{common-includes}/ol-icr-full-docker-pull.adoc[]
+
 
 Next, run the `docker build` commands to build container images for your application:
 
