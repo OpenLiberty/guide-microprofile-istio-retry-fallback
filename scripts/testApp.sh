@@ -47,7 +47,7 @@ kubectl get all -n istio-system
 
 SYSTEM=$(kubectl get pods | grep system | sed 's/ .*//')
 
-if ! kubectl exec -it "$SYSTEM" -- /opt/ol/wlp/bin/server pause; then
+if ! kubectl exec -it "$SYSTEM" -- /opt/ol/wlp/bin/server pause defaultServer; then
     kubectl exec "$SYSTEM" -- cat /logs/messages.log
     exit 1
 fi
