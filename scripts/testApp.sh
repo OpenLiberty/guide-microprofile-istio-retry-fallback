@@ -49,6 +49,8 @@ SYSTEM=$(kubectl get pods | grep system | sed 's/ .*//')
 
 if ! kubectl exec -it "$SYSTEM" -- /opt/ol/wlp/bin/server pause defaultServer --target=defaultHttpEndpoint; then
     kubectl exec "$SYSTEM" -- cat /logs/messages.log
+    kubectl exec "$SYSTEM" -- ls -Ral /config
+    kubectl exec "$SYSTEM" -- cat /config/server.xml
     exit 1
 fi
 
