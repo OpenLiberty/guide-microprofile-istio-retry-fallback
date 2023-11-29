@@ -47,7 +47,12 @@ kubectl get all -n istio-system
 
 SYSTEM=$(kubectl get pods | grep system | sed 's/ .*//')
 
-kubectl exec -it "$SYSTEM" -- /opt/ol/wlp/bin/server pause
+if ! kubectl exec -it "$SYSTEM" -- /opt/ol/wlp/bin/server pause; then
+    kubectl exec "$SYSTEM" -- cat /logs/messages.log
+    kubectl exec "$SYSTEM" -- ls -Ral /config
+    kubectl exec "$SYSTEM" -- cat /config/server.xml
+    exit 1
+fi
 
 sleep 60
 
