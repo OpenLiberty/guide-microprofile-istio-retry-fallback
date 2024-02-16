@@ -1,7 +1,4 @@
-// INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
-// INSTRUCTION: The copyright statement must appear at the top of the file
-//
-// Copyright (c) 2019, 2023 IBM Corporation and others.
+// Copyright (c) 2019, 2024 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -14,7 +11,7 @@
 :page-duration: 30 minutes
 :page-releasedate: 2019-09-13
 :page-description: Explore how to use MicroProfile Fault Tolerance together with Istio Fault Tolerance
-:page-tags: ['MicroProfile', 'Kubernetes', 'Docker']
+:page-tags: ['microprofile', 'kubernetes', 'docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
@@ -345,7 +342,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -353,7 +350,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -429,7 +426,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -437,7 +434,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -537,7 +534,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -545,7 +542,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -659,7 +656,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -667,7 +664,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -811,7 +808,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -819,7 +816,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
