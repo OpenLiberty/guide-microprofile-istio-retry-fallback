@@ -67,7 +67,7 @@ fi
 
 sleep 30
 
-COUNT=$(kubectl logs "$SYSTEM" -c istio-proxy | grep -c system-service:9080)
+COUNT=$(kubectl logs "$SYSTEM" -c istio-proxy | grep -c system-service:9090)
 
 echo COUNT="$COUNT"
 
