@@ -873,7 +873,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-istioctl x uninstall --purge
+istioctl uninstall --purge
 ```
 --
 
@@ -881,7 +881,7 @@ istioctl x uninstall --purge
 --
 [role=command]
 ```
-istioctl x uninstall --purge
+istioctl uninstall --purge
 ```
 --
 
@@ -889,7 +889,7 @@ istioctl x uninstall --purge
 --
 [role=command]
 ```
-istioctl x uninstall --purge
+istioctl uninstall --purge
 ```
 Perform the following steps to return your environment to a clean state.
 
