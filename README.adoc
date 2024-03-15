@@ -312,7 +312,7 @@ Finally, click the blue `Send` button to make the request.
 --
 [role=command]
 ```
-export ISTIO_INGRESS_PORT=$(kubectl get service -n istio-system istio-ingressgateway -o jsonpath='{.spec.ports[?(@.port==80)].nodePort}')
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 
 curl -H Host:inventory.example.com http://`minikube ip`:$ISTIO_INGRESS_PORT/inventory/systems/system-service -I
 ```
