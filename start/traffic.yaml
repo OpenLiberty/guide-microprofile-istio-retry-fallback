@@ -11,7 +11,7 @@ spec:
   - route:
     - destination:
         port:
-          number: 9080
+          number: 9090
         host: system-service
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -27,5 +27,5 @@ spec:
   - route:
     - destination:
         port:
-          number: 9081
+          number: 9091
         host: inventory-service

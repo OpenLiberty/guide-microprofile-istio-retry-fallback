@@ -22,7 +22,7 @@ metadata:
     app: system
 spec:
   ports:
-  - port: 9080
+  - port: 9090
     name: http
   selector:
     app: system
@@ -35,7 +35,7 @@ metadata:
     app: inventory
 spec:
   ports:
-  - port: 9081
+  - port: 9091
     name: http
   selector:
     app: inventory
@@ -59,7 +59,7 @@ spec:
       - name: system-container
         image: system:1.0-SNAPSHOT
         ports:
-        - containerPort: 9080
+        - containerPort: 9090
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -80,4 +80,4 @@ spec:
       - name: inventory-container
         image: inventory:1.0-SNAPSHOT
         ports:
-        - containerPort: 9081
+        - containerPort: 9091
