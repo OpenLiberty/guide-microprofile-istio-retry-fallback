@@ -312,7 +312,8 @@ Finally, click the blue `Send` button to make the request.
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -397,7 +398,7 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -519,7 +520,7 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -641,7 +642,7 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -778,7 +779,7 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
