@@ -1,7 +1,4 @@
-// INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
-// INSTRUCTION: The copyright statement must appear at the top of the file
-//
-// Copyright (c) 2019, 2023 IBM Corporation and others.
+// Copyright (c) 2019, 2024 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -14,7 +11,7 @@
 :page-duration: 30 minutes
 :page-releasedate: 2019-09-13
 :page-description: Explore how to use MicroProfile Fault Tolerance together with Istio Fault Tolerance
-:page-tags: ['MicroProfile', 'Kubernetes', 'Docker']
+:page-tags: ['microprofile', 'kubernetes', 'docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
@@ -105,7 +102,7 @@ include::{common-includes}/gitclone.adoc[]
 // Preparing your cluster and deploying Istio
 // =================================================================================================
 
-:minikube-start: minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.19.0
+:minikube-start: minikube start --memory=8192 --cpus=4
 :docker-desktop-description: Ensure that you have enough memory allocated to your Docker Desktop enviornment. 8GB is recommended but 4GB should be adequate if you don't have enough RAM.
 :minikube-description: The memory flag allocates 8GB of memory to your Minikube cluster. If you don't have enough RAM, then 4GB should be adequate.
 [role=command]
@@ -315,7 +312,8 @@ Finally, click the blue `Send` button to make the request.
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -345,7 +343,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -353,7 +351,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -400,7 +398,7 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -429,7 +427,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -437,7 +435,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -522,7 +520,7 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -537,7 +535,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -545,7 +543,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -644,7 +642,7 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -659,7 +657,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -667,7 +665,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -781,7 +779,7 @@ If the `curl` command is unavailable, then use https://www.getpostman.com/[Postm
 --
 [role=command]
 ```
-curl -H Host:inventory.example.com http://`minikube ip`:31380/inventory/systems/system-service -I
+curl -H Host:inventory.example.com http://`minikube ip`:$INGRESS_PORT/inventory/systems/system-service -I
 ```
 --
 
@@ -811,7 +809,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
+kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9090
 ```
 --
 
@@ -819,7 +817,7 @@ kubectl logs [system-pod-name] -c istio-proxy | grep -c system-service:9080
 --
 [role=command]
 ```
-kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9080"
+kubectl logs [system-pod-name] -c istio-proxy | find /C "system-service:9090"
 ```
 --
 
@@ -876,7 +874,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role=command]
 ```
-istioctl x uninstall --purge
+istioctl uninstall --purge
 ```
 --
 
@@ -884,7 +882,7 @@ istioctl x uninstall --purge
 --
 [role=command]
 ```
-istioctl x uninstall --purge
+istioctl uninstall --purge
 ```
 --
 
@@ -892,7 +890,7 @@ istioctl x uninstall --purge
 --
 [role=command]
 ```
-istioctl x uninstall --purge
+istioctl uninstall --purge
 ```
 Perform the following steps to return your environment to a clean state.
 
