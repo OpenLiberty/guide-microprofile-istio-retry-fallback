@@ -13,7 +13,7 @@
 :page-description: Explore how to use MicroProfile Fault Tolerance together with Istio Fault Tolerance
 :page-tags: ['microprofile', 'kubernetes', 'docker']
 :page-permalink: /guides/{projectid}
-:page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
+:page-related-guides: ['istio-intro', 'microprofile-fallback', `retry-timeout`]
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :source-highlighter: prettify
 :page-seo-title: Building resilient Java microservices using Eclipse MicroProfile and Istio Fault Tolerance
@@ -179,10 +179,31 @@ The integer value must be greater than or equal to -1. A value of -1 indicates t
 
 Navigate to the `guide-{projectid}/start` directory and run the following command to build your application and integrate the Retry policy into your microservices:
 
-[role=command]
+include::{common-includes}/os-tabs.adoc[]
+
+[.tab_content.windows_section]
+--
+[role='command']
 ```
-mvn package
+mvnw.cmd package
 ```
+--
+
+[.tab_content.mac_section]
+--
+[role='command']
+```
+./mvnw package
+```
+--
+
+[.tab_content.linux_section]
+--
+[role='command']
+```
+./mvnw package
+```
+--
 
 
 
@@ -733,10 +754,31 @@ the `system` service may not be running.
 
 Rebuild your application to add fallback behaviour to your microservices:
 
-[role=command]
+include::{common-includes}/os-tabs.adoc[]
+
+[.tab_content.windows_section]
+--
+[role='command']
 ```
-mvn package
+mvnw.cmd package
 ```
+--
+
+[.tab_content.mac_section]
+--
+[role='command']
+```
+./mvnw package
+```
+--
+
+[.tab_content.linux_section]
+--
+[role='command']
+```
+./mvnw package
+```
+--
 
 Next, run the `docker build` commands to rebuild the container images for your application:
 
