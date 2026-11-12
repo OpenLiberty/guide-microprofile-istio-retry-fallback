@@ -28,7 +28,7 @@ kubectl get nodes
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -q package
 
-docker pull -q icr.io/appcafe/open-liberty:kernel-slim-java11-openj9-ubi
+docker pull -q icr.io/appcafe/open-liberty:kernel-slim-java25-openj9-ubi-minimal
 
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
